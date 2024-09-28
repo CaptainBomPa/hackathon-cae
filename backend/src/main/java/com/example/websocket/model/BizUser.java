@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
-@DiscriminatorValue("BIZ")
+@DiscriminatorValue("BUSINESS")
 @NoArgsConstructor
 public class BizUser extends User {
     private String strategies;
