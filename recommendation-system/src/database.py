@@ -1,15 +1,11 @@
 import psycopg2
 from model import NGO, Company
-from src.model import Volunteer
+from model import Volunteer
 
 
 class Database:
-    def __init__(self, database, host, user, password, port):
-        self.conn = psycopg2.connect(database=database,
-                                host=host,
-                                user=user,
-                                password=password,
-                                port=port)
+    def __init__(self, url):
+        self.conn = psycopg2.connect(url)
 
     def get_ngo_by_id(self, ngo_id):
         cursor = self.conn.cursor()
