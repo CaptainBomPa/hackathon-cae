@@ -87,7 +87,7 @@ const ChatPage = () => {
         transition={{ type: 'tween', duration: 0.3 }}
         sx={{ padding: 0, marginLeft: 0, height: '100vh' }}
       >
-        <Box sx={{ display: 'flex', height: '100%' }}>
+        <Box sx={{ display: 'flex', height: '100%', justifyContent: 'center' }}>
           {/* Contact list panel */}
           <Box
             sx={{
@@ -135,7 +135,7 @@ const ChatPage = () => {
               flexDirection: 'column',
               alignItems: 'left',
               width: '60%',
-              marginLeft: '12%',
+              // marginLeft: '12%',
               backgroundColor: 'transparent',
               height: '87vh',
             }}
