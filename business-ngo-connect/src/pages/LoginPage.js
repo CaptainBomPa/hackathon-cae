@@ -5,22 +5,22 @@ import * as yup from 'yup';
 import CustomTextField from '../components/CustomTextField';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion'; // Import framer-motion
-import { login } from '../services/authService'; // Import funkcji logowania z authService
+import { login } from '../services/authService'; // Import login function
 
-// Schemat walidacji z yup
+// Validation schema with yup
 const validationSchema = yup.object({
-  email: yup.string().email('Niepoprawny adres e-mail').required('Adres e-mail jest wymagany'),
+  email: yup.string().email('Invalid email address').required('Email is required'),
   password: yup.string()
-    .min(8, 'Hasło musi mieć przynajmniej 8 znaków')
-    .required('Hasło jest wymagane'),
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is required'),
 });
 
 const LoginPage = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
-  const navigate = useNavigate(); // Hook do nawigacji
+  const navigate = useNavigate(); // Hook for navigation
 
-  // Funkcja obsługująca walidację formik
+  // Formik form validation
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -31,98 +31,139 @@ const LoginPage = () => {
       try {
         const userData = await login(values.email, values.password);
         console.log(userData);
-        // Przekierowanie na stronę główną lub inny komponent
-        navigate('/main'); // Zamień na odpowiedni adres
+        navigate('/main'); // Redirect after successful login
       } catch (error) {
-        setAlertMessage(error.message || 'Logowanie nie powiodło się');
+        setAlertMessage(error.message || 'Login failed');
         setShowAlert(true);
       }
     },
   });
 
-  // Obsługa zamknięcia alertu
+  // Handle alert close
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }} // Stan początkowy: niewidoczny, przesunięty w dół
-      animate={{ opacity: 1, y: 0 }} // Stan końcowy: widoczny, na właściwej pozycji
-      exit={{ opacity: 0, y: 50 }} // Stan podczas wychodzenia: niewidoczny, przesunięty w dół
-      transition={{ duration: 0.5 }} // Czas trwania animacji
+      initial={{ opacity: 0, y: 50 }} // Initial state: hidden, shifted down
+      animate={{ opacity: 1, y: 0 }} // Final state: visible, in place
+      exit={{ opacity: 0, y: 50 }} // Exit state: hidden, shifted down
+      transition={{ duration: 0.5 }} // Animation duration
     >
-      <Container maxWidth="sm">
-        <Typography variant="h3" align="center" gutterBottom style={{ marginTop: 10, color: "#82ff82" }}>
-          LOGOWANIE
-        </Typography>
-        <form onSubmit={formik.handleSubmit} noValidate autoComplete="off">
-          <CustomTextField 
-            label="Adres e-mail" 
-            name="email"
-            type="email" 
-            fullWidth 
-            required 
-            margin="normal"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-          />
-          <CustomTextField 
-            label="Hasło" 
-            name="password"
-            type="password" 
-            fullWidth 
-            required 
-            margin="normal"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-          />
-          <Box mt={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              type="submit"
-              sx={{ backgroundColor: '#82ff82', '&:hover': { backgroundColor: '#70e270' } }}
-            >
-              Zaloguj się
-            </Button>
-          </Box>
-        </form>
-
-        <Box mt={2} textAlign="center">
-          <Typography variant="body2">
-            Nie posiadasz konta?{' '}
-            <Link
-              to="/register"
-              style={{
-                color: '#82ff82',
-                textDecoration: 'none',
-                cursor: 'pointer',
-              }}
-            >
-              Kliknij tutaj
-            </Link>{' '}
-            aby przejść do formularza rejestracyjnego.
-          </Typography>
-        </Box>
-
-        <Snackbar
-          open={showAlert}
-          autoHideDuration={10000}
-          onClose={handleCloseAlert}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      <Container 
+        maxWidth="sm"
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          height: '100vh' // Centers the form vertically and horizontally
+        }}
+      >
+        <Box 
+          sx={{ 
+            backgroundColor: '#8F8F8F', 
+            padding: 7, // Zwiększenie paddingu
+            borderRadius: '20px', // Zaokrąglenie rogów formularza
+            textAlign: 'center',
+            width: '100%', 
+            maxWidth: '500px' // Zwiększenie maksymalnej szerokości formularza
+          }}
         >
-          <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
-            {alertMessage}
-          </Alert>
-        </Snackbar>
+          {/* Logo */}
+          <Box mb={4}>
+            <img src="/logo.png" alt="Logo" style={{ width: '200px' }} /> {/* Zwiększenie rozmiaru logo */}
+          </Box>
+          
+          <form onSubmit={formik.handleSubmit} noValidate autoComplete="off">
+            <CustomTextField 
+              label="Email Address" 
+              name="email"
+              type="email" 
+              fullWidth 
+              required 
+              margin="normal"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+              sx={{ 
+                '& .MuiInputBase-input': {
+                  fontSize: '18px', // Zwiększenie rozmiaru tekstu w polu tekstowym
+                },
+                '& .MuiInputLabel-root': {
+                  fontSize: '18px', // Zwiększenie rozmiaru etykiety
+                },
+              }}
+            />
+            <CustomTextField 
+              label="Password" 
+              name="password"
+              type="password" 
+              fullWidth 
+              required 
+              margin="normal"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+              sx={{ 
+                '& .MuiInputBase-input': {
+                  fontSize: '18px', // Zwiększenie rozmiaru tekstu w polu tekstowym
+                },
+                '& .MuiInputLabel-root': {
+                  fontSize: '18px', // Zwiększenie rozmiaru etykiety
+                },
+              }}
+            />
+            <Box mt={3}> {/* Zwiększenie odstępu */}
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                type="submit"
+                sx={{ 
+                  backgroundColor: '#6D6D6D', 
+                  '&:hover': { backgroundColor: '#5c5c5c' }, 
+                  fontSize: '20px', // Zwiększenie rozmiaru czcionki przycisku
+                  padding: '12px 0' // Zwiększenie paddingu przycisku
+                }}
+              >
+                Log in
+              </Button>
+            </Box>
+          </form>
+
+          <Box mt={3} textAlign="center"> {/* Zwiększenie odstępu */}
+            <Typography variant="body1" style={{ color: '#fff' }}> {/* Zwiększenie rozmiaru tekstu linku */}
+              Don't have an account?{' '}
+              <Link
+                to="/register"
+                style={{
+                  color: '#fff',
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                }}
+              >
+                Sign up here
+              </Link>{' '}
+              to create an account.
+            </Typography>
+          </Box>
+
+          <Snackbar
+            open={showAlert}
+            autoHideDuration={10000}
+            onClose={handleCloseAlert}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+            <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
+              {alertMessage}
+            </Alert>
+          </Snackbar>
+        </Box>
       </Container>
     </motion.div>
   );

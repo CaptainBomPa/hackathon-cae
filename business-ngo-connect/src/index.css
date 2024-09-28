@@ -22,16 +22,3 @@ code {
   height: 8px; /* Wysokość paska przewijania (dla osi poziomej) */
 }
 
-*::-webkit-scrollbar-track {
-  background-color: #ffffff; /* Tło suwaka */
-  border-radius: 10px; /* Zaokrąglenie krawędzi */
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: #82ff82; /* Kolor suwaka */
-  border-radius: 10px; /* Zaokrąglenie krawędzi */
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background-color: #70e270; /* Kolor suwaka przy najechaniu */
-}
