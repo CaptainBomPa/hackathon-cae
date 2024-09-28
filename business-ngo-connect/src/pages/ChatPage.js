@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Typography, Box, List, ListItem, ListItemText, Paper, TextField, IconButton } from '@mui/material';
+import { Typography, Box, List, ListItem, ListItemText, Paper, TextField, IconButton, Avatar } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import DashboardLayout from '../components/DashboardLayout';
 import { getMatchedUsers, getMessages, sendMessage, connectWebSocket, disconnectWebSocket } from '../services/chatService'; // Updated imports
@@ -29,10 +29,10 @@ const ChatPage = () => {
     };
     fetchMatchedUsers();
     
-    // Połącz z WebSocket po załadowaniu komponentu
+    // Connect to WebSocket when component loads
     connectWebSocket(loggedInUserId, handleMessageReceived);
 
-    // Rozłącz WebSocket po odmontowaniu komponentu
+    // Disconnect WebSocket on unmount
     return () => {
       disconnectWebSocket();
     };
@@ -52,7 +52,7 @@ const ChatPage = () => {
     }
   }, [selectedUser]);
 
-  // Obsługa odbierania wiadomości w czasie rzeczywistym
+  // Handle receiving real-time messages
   const handleMessageReceived = (receivedMessage) => {
     if (receivedMessage.senderId === selectedUser.id || receivedMessage.receiverId === selectedUser.id) {
       setMessages((prevMessages) => [...prevMessages, receivedMessage]);
@@ -85,16 +85,16 @@ const ChatPage = () => {
         animate="animate"
         exit="exit"
         transition={{ type: 'tween', duration: 0.3 }}
-        sx={{padding: 0, marginLeft: 0, height:'100vh'}}
+        sx={{ padding: 0, marginLeft: 0, height: '100vh' }}
       >
-        <Box>
+        <Box sx={{ display: 'flex', height: '100%' }}>
           {/* Contact list panel */}
           <Box
             sx={{
               width: '12%',
               overflowY: 'auto',
               height: '100%',
-              backgroundColor: 'rgba(109, 109, 109, 0.4)', // Similar styling to MainPage
+              backgroundColor: 'rgba(109, 109, 109, 0.4)',
               padding: 0,
               marginTop: '64px',
               position: 'fixed',
@@ -104,49 +104,47 @@ const ChatPage = () => {
           >
             <List sx={{ width: '100%' }}>
               {matchedUsers.map((user) => (
-                <React.Fragment key={user.id}>
-                  <ListItem
-                    button
-                    onClick={() => handleSelectUser(user)}
-                    selected={selectedUser && selectedUser.id === user.id}
-                    sx={{
-                      padding: '10px 16px',
-                      backgroundColor: selectedUser && selectedUser.id === user.id
-                        ? 'rgba(65, 140, 181, 0.6)'
-                        : 'rgba(109, 109, 109, 0.0)', // Background color when selected
-                      '&:hover': {
-                        backgroundColor: 'rgba(109, 109, 109, 0.6)', // Hover color
-                      },
-                      color: 'black',
-                      transition: 'background-color 0.3s ease', // Smooth background transition
-                      border: 'none', // Remove borders
-                    }}
-                  >
-                    <ListItemText primary={user.name} />
-                  </ListItem>
-                </React.Fragment>
+                <ListItem
+                  key={user.id}
+                  button
+                  onClick={() => handleSelectUser(user)}
+                  selected={selectedUser && selectedUser.id === user.id}
+                  sx={{
+                    padding: '10px 16px',
+                    backgroundColor: selectedUser && selectedUser.id === user.id
+                      ? 'rgba(65, 140, 181, 0.6)'
+                      : 'rgba(109, 109, 109, 0.0)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(109, 109, 109, 0.6)',
+                    },
+                    color: 'black',
+                    transition: 'background-color 0.3s ease',
+                    border: 'none',
+                  }}
+                >
+                  <ListItemText primary={user.name} />
+                </ListItem>
               ))}
             </List>
           </Box>
 
-          {/* Chat */}
+          {/* Chat messages section */}
           <Box
             sx={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'left',
               width: '60%',
-              marginLeft: '30%', // Przesunięcie zawartości głównej w prawo, aby nie była zasłonięta przez lewy panel
+              marginLeft: '12%',
               backgroundColor: 'transparent',
-              height: '87vh'
-              
+              height: '87vh',
             }}
           >
             {/* Messages list */}
             <Box sx={{ flex: 1, overflowY: 'auto', padding: 2, backgroundColor: 'transparent' }}>
-              <Typography variant="h6" align="center" gutterBottom sx={{ color: '#fff' }}>
+              {/* <Typography variant="h6" align="center" gutterBottom sx={{ color: '#fff' }}>
                 {selectedUser ? selectedUser.name : 'Select a contact'}
-              </Typography>
+              </Typography> */}
               {messages.length === 0 ? (
                 <Typography variant="body1" align="center" color="textSecondary" sx={{ color: '#fff' }}>
                   No messages.
@@ -167,11 +165,12 @@ const ChatPage = () => {
                         backgroundColor: msg.senderId === loggedInUserId ? '#418CB5' : '#f1f1f1',
                         maxWidth: '70%',
                         wordBreak: 'break-word',
-                        // borderRadius: '20px',
                         borderTopLeftRadius: '20px',
                         borderTopRightRadius: '20px',
+                        paddingLeft: '20px',
+                        paddingRight: '20px',
                         borderBottomLeftRadius: msg.senderId === loggedInUserId ? '20px' : 0,
-                        borderBottomRightRadius: msg.senderId === loggedInUserId ? 0 : '20px'
+                        borderBottomRightRadius: msg.senderId === loggedInUserId ? 0 : '20px',
                       }}
                     >
                       <Typography variant="body2" color="textSecondary">
@@ -198,10 +197,10 @@ const ChatPage = () => {
                   InputProps={{
                     sx: {
                       '& .MuiInputBase-input': {
-                        color: 'white',
+                        color: 'black',
                       },
                       '& .MuiInputBase-input::placeholder': {
-                        color: 'white',
+                        color: 'black',
                         opacity: 0.75,
                       },
                     },
@@ -213,6 +212,37 @@ const ChatPage = () => {
               </Box>
             )}
           </Box>
+
+          {/* User profile section (right-side) */}
+          {selectedUser && (
+            <Box
+              sx={{
+                width: '15%',
+                padding: 3,
+                backgroundColor: 'rgba(109, 109, 109, 0.4)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                position: 'fixed',
+                right: 0,
+                top: '64px',
+                height: 'calc(100vh - 64px)',
+                // justifyContent: 'center',
+              }}
+            >
+              <Avatar
+                alt={selectedUser.name}
+                src={selectedUser.photoUrl || '/default-profile.png'}
+                sx={{ width: 120, height: 120, marginBottom: 2 }}
+              />
+              <Typography variant="h6" sx={{ color: '#fff', marginBottom: 1 }}>
+                {selectedUser.name}
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#fff', textAlign: 'center', opacity: 0.8 }}>
+                {selectedUser.description || 'This user has no description.'}
+              </Typography>
+            </Box>
+          )}
         </Box>
       </motion.div>
     </DashboardLayout>

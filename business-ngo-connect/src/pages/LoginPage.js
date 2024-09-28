@@ -127,8 +127,8 @@ const LoginPage = () => {
                 fullWidth
                 type="submit"
                 sx={{ 
-                  backgroundColor: '#6D6D6D', 
-                  '&:hover': { backgroundColor: '#5c5c5c' }, 
+                  backgroundColor: 'rgba(65, 140, 181, 0.6)', 
+                  '&:hover': { backgroundColor: 'rgba(65, 140, 181, 1.0)' }, 
                   fontSize: '20px', // Zwiększenie rozmiaru czcionki przycisku
                   padding: '12px 0', // Zwiększenie paddingu przycisku
                   borderRadius: '20px'

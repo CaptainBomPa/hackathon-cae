@@ -141,6 +141,7 @@ const UserSettingsPage = () => {
               flexDirection: 'column',
               alignItems: 'center', // Center items
               borderRadius: '20px',
+        
             }}
           >
             <Typography variant="h6" gutterBottom>
@@ -153,11 +154,12 @@ const UserSettingsPage = () => {
               onChange={(e) => setUserData({ ...userData, name: e.target.value })}
               sx={{ marginBottom: 2,
                 borderRadius: '20px',
+                width: '60vh'
                }}
             />
             <TextField
               label="Email"
-              fullWidth
+              
               value={userData.email}
               onChange={(e) => setUserData({ ...userData, email: e.target.value })}
               sx={{ 
@@ -165,13 +167,17 @@ const UserSettingsPage = () => {
                 '& .MuiInputLabel-root': {
                   fontSize: '18px', // Zwiększenie rozmiaru etykiety
                 },
+                width: '60vh'
                }}
             />
             <Button
               variant="contained"
               color="primary"
+              
               onClick={handleProfileUpdate}
               sx={{ 
+                width: '60vh',
+                height: '6vh',
                 borderRadius: '20px',
                 marginTop: 2, 
                 backgroundColor: 'rgba(65, 140, 181, 0.8)', 
@@ -192,6 +198,7 @@ const UserSettingsPage = () => {
               flexDirection: 'column',
               alignItems: 'center', // Center items
               borderRadius: '20px',
+              
             }}
           >
             <Typography variant="h6" gutterBottom>
@@ -324,7 +331,8 @@ const UserSettingsPage = () => {
           </Box>
 
           <Grid item xs={12} md={9} sx={{ 
-            marginLeft: '20%' 
+            marginLeft: '20%', 
+            height:'100vh'
             }}> {/* Add margin to offset the fixed sidebar */}
             <motion.div
               variants={pageVariants}
