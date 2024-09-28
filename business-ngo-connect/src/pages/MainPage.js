@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Container, Box, IconButton, Typography, List, ListItem, ListItemText } from '@mui/material';
 import DashboardLayout from '../components/DashboardLayout';
 import BusinessCard from '../components/BusinessCard';
-import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'; // Import pustej ikony serca
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import { motion } from 'framer-motion'; // Import framer-motion
+import { motion } from 'framer-motion';
+import {
+  getCompanyRecommendations,
+  getVolunteerRecommendations,
+  getNgoCompanyRecommendations,
+  getNgoVolunteerRecommendations,
+} from '../services/mainService';
 
 const pageVariants = {
   initial: { opacity: 0, scale: 0.8 },
@@ -17,16 +22,40 @@ const pageVariants = {
 const MainPage = () => {
   const [businesses, setBusinesses] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedFilter, setSelectedFilter] = useState('ngo'); // Domyślnie wybrana pierwsza opcja
+  const [selectedFilter, setSelectedFilter] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    fetchData();
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      const role = storedUser.role.toLowerCase();
+      setUserRole(role);
+      setUserId(storedUser.id);
+      setSelectedFilter(role === 'business' || role === 'volunteer' ? 'ngo' : 'companies');
+      fetchData(role, storedUser.id, role === 'business' || role === 'volunteer' ? 'ngo' : 'companies');
+    }
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = async (role, id, filter) => {
     try {
-      const response = await axios.get('http://localhost:4000/api/users');
-      setBusinesses(response.data);
+      let response;
+      switch (role) {
+        case 'ngo':
+          response = filter === 'companies'
+            ? await getNgoCompanyRecommendations(id)
+            : await getNgoVolunteerRecommendations(id);
+          break;
+        case 'business':
+          response = await getCompanyRecommendations(id);
+          break;
+        case 'volunteer':
+          response = await getVolunteerRecommendations(id);
+          break;
+        default:
+          throw new Error('Invalid role');
+      }
+      setBusinesses(response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -50,15 +79,28 @@ const MainPage = () => {
 
   const handleFilter = (filterType) => {
     setSelectedFilter(filterType);
-    // Tutaj można dodać logikę filtrowania po rodzaju użytkowników (NGO, Business, Volunteer)
-    fetchData();
+    fetchData(userRole, userId, filterType);
   };
 
-  const filterOptions = [
-    { label: 'Search NGO', value: 'ngo' },
-    { label: 'Search Business', value: 'business' },
-    { label: 'Search Volunteers', value: 'volunteer' },
-  ];
+  const getFilterOptions = () => {
+    switch (userRole) {
+      case 'ngo':
+        return [
+          { label: 'Search NGO', value: 'ngo' }, // Dodanie opcji 'Search NGO' dla NGO
+          { label: 'Search Companies', value: 'companies' },
+          { label: 'Search Volunteers', value: 'volunteers' },
+        ];
+      case 'business':
+      case 'volunteer':
+        return [
+          { label: 'Search NGO', value: 'ngo' },
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const filterOptions = getFilterOptions();
 
   return (
     <DashboardLayout>
@@ -110,8 +152,6 @@ const MainPage = () => {
                     '&:hover': {
                       backgroundColor: 'rgba(109, 109, 109, 0.6)', // Zmiana opacity po najechaniu
                     },
-                    // marginBottom: 1,
-                    // borderRadius: '4px',
                     opacity: 'inherit', // Dziedziczenie opacity całej listy
                     transition: 'background-color 0.3s ease', // Płynne przejście tła
                   }}
@@ -154,13 +194,13 @@ const MainPage = () => {
                 />
               ) : (
                 <Typography variant="h6" align="center">
-                  No businesses available to display.
+                  No data available to display.
                 </Typography>
               )}
             </Box>
 
             {/* Przyciski akcji */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 12 }}> {/* Zwiększone odstępy między przyciskami */}
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
               <IconButton
                 sx={{
                   backgroundColor: '#E38888', // Zmieniony kolor tła przycisku X
@@ -184,7 +224,7 @@ const MainPage = () => {
                 }}
                 onClick={handleSwipeRight}
               >
-                <FavoriteBorderIcon sx={{ fontSize: '2rem' }} /> {/* Pusta ikona serca */}
+                <FavoriteBorderIcon sx={{ fontSize: '2rem' }} />
               </IconButton>
 
               <IconButton
