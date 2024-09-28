@@ -1,5 +1,6 @@
-package com.example.websocket.chat;
+package com.example.websocket.repository;
 
+import com.example.websocket.model.ChatMessage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

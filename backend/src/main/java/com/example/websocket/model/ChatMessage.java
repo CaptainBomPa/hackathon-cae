@@ -1,4 +1,4 @@
-package com.example.websocket.chat;
+package com.example.websocket.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
