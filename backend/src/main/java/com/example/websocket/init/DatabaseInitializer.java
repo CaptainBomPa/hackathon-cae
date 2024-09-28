@@ -42,7 +42,7 @@ public final class DatabaseInitializer implements CommandLineRunner {
             biz.setName("Biz User" + i);
             biz.setEmail("biz" + i + "@example.com");
             biz.setPassword("biz");
-            biz.setRole(Role.BIZ);
+            biz.setRole(Role.BUSINESS);
 
             NgoUser ngo = new NgoUser();
             ngo.setName("Ngo User" + i);

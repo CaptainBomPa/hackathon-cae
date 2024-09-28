@@ -1,7 +1,7 @@
 package com.example.websocket.model;
 
 public enum Role {
-    BIZ,
+    BUSINESS,
     NGO,
     VOLUNTEER;
 

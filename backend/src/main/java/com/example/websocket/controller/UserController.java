@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -21,7 +20,7 @@ public class UserController {
     @PostMapping("/register")
     public UserDTO register(@RequestBody UserDTO userDTO) {
         User user = switch (Role.fromString(userDTO.getRole())) {
-            case BIZ -> userService.register(new BizUser(userDTO));
+            case BUSINESS -> userService.register(new BizUser(userDTO));
             case NGO -> userService.register(new NgoUser(userDTO));
             case VOLUNTEER -> userService.register(new VolunteerUser(userDTO));
             default -> throw new IllegalArgumentException("User role doesn't match any expected value.");
