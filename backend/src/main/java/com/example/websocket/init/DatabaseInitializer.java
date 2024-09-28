@@ -1,21 +1,27 @@
 package com.example.websocket.init;
 
-import com.example.websocket.model.BizUser;
-import com.example.websocket.model.NgoUser;
-import com.example.websocket.model.Role;
-import com.example.websocket.model.VolunteerUser;
+import com.example.websocket.model.*;
 import com.example.websocket.model.enums.CompanySize;
+import com.example.websocket.repository.ChatMessageRepository;
+import com.example.websocket.repository.SwipeRepository;
 import com.example.websocket.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
 public final class DatabaseInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
+    private final SwipeRepository swipeRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     private String[] ngoStrategies = new String[]{"Increasing public awareness of environmental issues",
             "Supporting local communities through education and training",
@@ -70,8 +76,32 @@ public final class DatabaseInitializer implements CommandLineRunner {
             new BigDecimal("100000.00")
     };
 
+    private List<Long> messageSenderIds = List.of(0L, 1L, 2L);
+
+    private List<Long> messageReceiverIds = new ArrayList<>(Arrays.asList(0L, 1L, 2L));
+
+    private List<String> messageContents = Arrays.asList(
+            "siemanko, co tam?",
+            "poklikamy?",
+            "przyswirujmy",
+            "bedzie co?",
+            "lądujemy?",
+            "witamy się z gąską?",
+            "fajne NGO wariacie"
+    );
+
+    private LocalDateTime dateTime = LocalDateTime.now();
+
+    private List<Boolean> messagesAreRead = List.of(false, true);
+
+
     @Override
     public void run(String... args) throws Exception {
+        generateUsers();
+        generateMessages();
+    }
+
+    private void generateUsers() {
         for (int i = 0; i < 3; i++) {
             BizUser biz = new BizUser();
             biz.setName("Biz User" + i);
@@ -107,6 +137,50 @@ public final class DatabaseInitializer implements CommandLineRunner {
             userRepository.save(biz);
             userRepository.save(ngo);
             userRepository.save(vol);
+
+            //match generation
+            if (i == 1) {
+                generateBizNgoMatch(biz, ngo);
+                generateNgoVolunteerMatch(ngo, vol);
+            }
         }
     }
+
+    private void generateBizNgoMatch(BizUser biz, NgoUser ngo) {
+        Swipe swipeBizNgo = new Swipe();
+        swipeBizNgo.setUserId(biz.getId());
+        swipeBizNgo.setPartnerId(ngo.getId());
+        swipeBizNgo.setSwipeStatus(true);
+        swipeRepository.save(swipeBizNgo);
+    }
+
+    private void generateNgoVolunteerMatch(NgoUser ngo, VolunteerUser vol) {
+        Swipe swipeNgoVol = new Swipe();
+        swipeNgoVol.setUserId(ngo.getId());
+        swipeNgoVol.setPartnerId(vol.getId());
+        swipeNgoVol.setSwipeStatus(true);
+        swipeRepository.save(swipeNgoVol);
+    }
+
+    private void generateMessages() {
+        for (int i = 0; i < 80; i++) {
+            ChatMessage message = new ChatMessage();
+            message.setId((long) i);
+            message.setRead(getRandomValue(messagesAreRead));
+            message.setContent(getRandomValue(messageContents));
+            message.setSenderId(getRandomValue(messageSenderIds));
+            messageReceiverIds.remove(message.getSenderId());
+            message.setReceiverId(getRandomValue(messageReceiverIds));
+            messageReceiverIds.add(message.getSenderId());
+            message.setTimestamp(dateTime);
+            chatMessageRepository.save(message);
+        }
+    }
+
+    public static <T> T getRandomValue(List<T> list) {
+        Random random = new Random();
+        int randomIndex = random.nextInt(list.size());
+        return list.get(randomIndex);
+    }
+
 }

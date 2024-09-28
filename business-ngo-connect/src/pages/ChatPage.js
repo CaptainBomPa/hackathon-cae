@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Typography, Box, List, ListItem, ListItemText, Paper, TextField, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import DashboardLayout from '../components/DashboardLayout';
-import { getMatchedUsers, getMessages, sendMessage } from '../services/chatService'; // Updated imports
+import { getMatchedUsers, getMessages, sendMessage, connectWebSocket, disconnectWebSocket } from '../services/chatService'; // Updated imports
 import { motion } from 'framer-motion'; // Import framer-motion
 
 const pageVariants = {
@@ -28,6 +28,14 @@ const ChatPage = () => {
       }
     };
     fetchMatchedUsers();
+    
+    // Połącz z WebSocket po załadowaniu komponentu
+    connectWebSocket(loggedInUserId, handleMessageReceived);
+
+    // Rozłącz WebSocket po odmontowaniu komponentu
+    return () => {
+      disconnectWebSocket();
+    };
   }, []);
 
   useEffect(() => {
@@ -44,22 +52,24 @@ const ChatPage = () => {
     }
   }, [selectedUser]);
 
-  const handleSendMessage = async () => {
+  // Obsługa odbierania wiadomości w czasie rzeczywistym
+  const handleMessageReceived = (receivedMessage) => {
+    if (receivedMessage.senderId === selectedUser.id || receivedMessage.receiverId === selectedUser.id) {
+      setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+    }
+  };
+
+  const handleSendMessage = () => {
     if (newMessage.trim() === '' || !selectedUser) return;
     const message = {
-      relationId: selectedUser.id,
       senderId: loggedInUserId,
       receiverId: selectedUser.id,
-      message: newMessage,
-      timestamp: new Date().toISOString(),
+      content: newMessage,
+      isRead: false,
     };
-    try {
-      await sendMessage(message);
-      setMessages([...messages, message]);
-      setNewMessage('');
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
+    sendMessage(message);
+    setMessages([...messages, message]);
+    setNewMessage('');
   };
 
   const handleSelectUser = (user) => {
@@ -75,9 +85,9 @@ const ChatPage = () => {
         animate="animate"
         exit="exit"
         transition={{ type: 'tween', duration: 0.3 }}
-        sx={{padding: 0, marginLeft: 0, heigth:'100vh'}}
+        sx={{padding: 0, marginLeft: 0, height:'100vh'}}
       >
-        <Box >
+        <Box>
           {/* Contact list panel */}
           <Box
             sx={{
