@@ -5,8 +5,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -14,6 +13,7 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @DiscriminatorValue("BIZ")
+@NoArgsConstructor
 public class BizUser extends User {
     private String strategies;
     private String socialGoals;
@@ -26,4 +26,6 @@ public class BizUser extends User {
     public BizUser(UserDTO userDTO) {
         super(userDTO);
     }
+
+
 }
