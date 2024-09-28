@@ -2,7 +2,8 @@ package com.example.websocket.model;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
@@ -15,5 +16,15 @@ public class VolunteerUser extends User {
 
     public VolunteerUser(UserDTO userDTO) {
         super(userDTO);
+        this.firstName = userDTO.getFirstName();
+        this.lastName = userDTO.getLastName();
+        this.hobbies = userDTO.getHobbies();
+    }
+
+    public void merge(VolunteerUser volunteerUser) {
+        super.merge(volunteerUser);
+        this.firstName = volunteerUser.getFirstName();
+        this.lastName = volunteerUser.getLastName();
+        this.hobbies = volunteerUser.getHobbies();
     }
 }

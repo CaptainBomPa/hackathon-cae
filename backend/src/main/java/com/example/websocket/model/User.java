@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected long id;
-    protected String name;
-    protected String email;
-    protected String password;
-    protected Role role;
+    private long id;
+    private String name;
+    private String email;
+    private String password;
+    private Role role;
     private String socialGoals;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "photo_id", referencedColumnName = "id")
@@ -32,9 +32,19 @@ public abstract class User {
 //    private String contactEmail;
 
     protected User(UserDTO userDTO) {
+        if (userDTO.getId() != 0) {
+            this.id = userDTO.getId();
+        }
         this.name = userDTO.getName();
         this.email = userDTO.getEmail();
+        this.description = userDTO.getDescription();
+        this.socialGoals = userDTO.getSocialGoals();
         this.password = userDTO.getPassword();
         this.role = Role.valueOf(userDTO.getRole());
+    }
+
+    protected void merge(User user){
+        this.description = user.getDescription();
+        this.socialGoals = user.getSocialGoals();
     }
 }

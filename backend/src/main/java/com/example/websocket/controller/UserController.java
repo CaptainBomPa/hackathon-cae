@@ -40,6 +40,24 @@ public class UserController {
                 .orElse(null);
     }
 
+    @PostMapping("/additionalData")
+    public UserDTO updateData(@RequestBody UserDTO userDTO) {
+        Role role = Role.fromString(userDTO.getRole());
+        if (role == Role.BUSINESS) {
+            BizUser updatedUser = (BizUser) userService.update(new BizUser(userDTO));
+            userDTO.merge(updatedUser);
+        } else if (role == Role.NGO) {
+            NgoUser updatedUser = (NgoUser) userService.update(new NgoUser(userDTO));
+            userDTO.merge(updatedUser);
+        } else if (role == Role.VOLUNTEER) {
+            VolunteerUser updatedUser = (VolunteerUser) userService.update(new VolunteerUser(userDTO));
+            userDTO.merge(updatedUser);
+        } else {
+            throw new IllegalArgumentException("User role doesn't match any expected value.");
+        }
+        return userDTO;
+    }
+
     @GetMapping("/match")
     public List<UserDTO> getAllMatchedUsers(@RequestParam Long userId) {
         return userService.getAllMatchedUsers(userId);
