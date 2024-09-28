@@ -52,6 +52,10 @@ public final class DatabaseInitializer implements CommandLineRunner {
         createBizUsers();
         createVolunteerUsers();
 
+        //Manual swipe creation
+        generateNgoVolunteerMatch(ngoUsers.get(14), volunteerUsers.get(4));
+        generateBizNgoMatch(bizUsers.get(12), ngoUsers.get(14));
+
         // You can add more data creation methods here in the future
         generateMessages();
     }
