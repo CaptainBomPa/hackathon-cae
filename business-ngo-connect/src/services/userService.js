@@ -1,19 +1,28 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:4000/api'; // Zaktualizuj URL według potrzeb
+const API_URL = 'http://localhost:8080/api'; // Aktualizacja adresu URL do nowego API
 
 // Funkcja do aktualizacji profilu
-export const updateProfile = async (data) => {
+export const updateProfile = async (userId, data) => {
   try {
-    const userId = 4; // Zakładam, że znasz ID użytkownika, np. zalogowany użytkownik
     const formData = new FormData();
 
     // Przenosimy dane z obiektu data do formData
-    formData.append('description', data.description);
-    data.categories.forEach((category, index) => {
+    if (data.name) {
+      formData.append('name', data.name);
+    }
+    if (data.email) {
+      formData.append('email', data.email);
+    }
+    if (data.description) {
+      formData.append('description', data.description);
+    }
+    // Dodawanie kategorii
+    data.categories?.forEach((category, index) => {
       formData.append(`categories[${index}]`, category);
     });
-    data.images.forEach((image) => {
+    // Dodawanie zdjęć
+    data.images?.forEach((image) => {
       formData.append('images', image); // Przypisujemy pliki zdjęć
     });
 
@@ -30,9 +39,8 @@ export const updateProfile = async (data) => {
 };
 
 // Funkcja do zmiany hasła
-export const updatePassword = async (data) => {
+export const updatePassword = async (userId, data) => {
   try {
-    const userId = 4; // Zakładam, że znasz ID użytkownika, np. zalogowany użytkownik
     const response = await axios.put(`${API_URL}/users/${userId}/password`, data);
     return response.data;
   } catch (error) {
@@ -50,12 +58,26 @@ export const getAllUsers = async () => {
   }
 };
 
-// Pobieranie danych użytkownika
+// Funkcja do pobrania danych użytkownika
 export const getUser = async (userId) => {
-    try {
-      const response = await axios.get(`http://localhost:4000/api/users/${userId}`);
-      return response.data;
-    } catch (error) {
-      throw new Error('Nie udało się pobrać danych użytkownika.');
-    }
-  };
+  try {
+    const response = await axios.get(`${API_URL}/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Nie udało się pobrać danych użytkownika.');
+  }
+};
+
+// Funkcja do przesyłania zdjęcia profilowego
+export const uploadPhoto = async (userId, photoData) => {
+  try {
+    const response = await axios.put(`${API_URL}/users/${userId}/photo`, photoData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Błąd podczas przesyłania zdjęcia profilowego');
+  }
+};

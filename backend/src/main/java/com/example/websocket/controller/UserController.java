@@ -33,7 +33,7 @@ public class UserController {
     @PostMapping("/login")
     public UserDTO login(@RequestBody LoginDTO credentials) {
         return userService.login(credentials.getEmail(), credentials.getPassword())
-                .map(user -> UserDTO.builder().id(user.getId()).name(user.getName()).build())
+                .map(user -> UserDTO.builder().id(user.getId()).name(user.getName()).email(user.getEmail()).role(user.getRole().toString()).build())
                 .orElse(null);
     }
 

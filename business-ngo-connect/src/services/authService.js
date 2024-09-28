@@ -11,6 +11,7 @@ export const login = async (email, password) => {
       password,
     });
     if (response.status === 200) {
+      console.log(JSON.stringify(response.data));
       localStorage.setItem('user', JSON.stringify(response.data));
     } else {
       throw new Error('An unexpected error occurred');
