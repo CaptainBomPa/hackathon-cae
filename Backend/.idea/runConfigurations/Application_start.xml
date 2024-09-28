@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Application start" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.example.websocket.WebsocketApplication" />
+    <module name="websocket" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
