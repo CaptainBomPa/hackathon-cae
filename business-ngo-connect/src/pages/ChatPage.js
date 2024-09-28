@@ -125,7 +125,7 @@ const ChatPage = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'left',
-              width: '50%',
+              width: '60%',
               marginLeft: '30%', // Przesunięcie zawartości głównej w prawo, aby nie była zasłonięta przez lewy panel
               backgroundColor: 'transparent',
               height: '87vh'

@@ -4,8 +4,6 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  Typography,
-  Drawer,
   List,
   ListItem,
   ListItemIcon,
@@ -13,6 +11,7 @@ import {
   Avatar,
   Menu,
   MenuItem,
+  Drawer,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -127,11 +126,45 @@ const DashboardLayout = ({ children }) => {
               horizontal: 'right', // Menu zaczyna się od prawej strony
             }}
             keepMounted
+            sx={{
+              '& .MuiPaper-root': {
+                borderRadius: '10px', // Zaokrąglone krawędzie
+              },
+              '& .MuiList-root': {
+                paddingBottom: '0px', // Nadpisanie padding-bottom
+                paddingTop: '0px',
+                // height: '20vh'
+              },
+              height: '40vh'
+            }}
           >
             {userMenuItems.map((item, index) => (
-              <MenuItem key={index} onClick={() => handleNavigate(item.path)}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+              <MenuItem
+                key={index}
+                onClick={() => handleNavigate(item.path)}
+                sx={{
+                  height: '7vh',
+                  backgroundColor: item.text === 'Log Out' ? '#E38888' : 'transparent',
+                  color: item.text === 'Log Out' ? 'white' : 'inherit',
+                  '&:hover': {
+                    backgroundColor: item.text === 'Log Out' ? '#C56060' : '#D1D1D1', // Ciemniejszy odcień czerwonego przy najechaniu
+                    color: item.text === 'Log Out' ? 'white' : 'inherit', // Utrzymanie koloru tekstu
+                  },
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    color: item.text === 'Log Out' ? 'white' : 'inherit',
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={item.text}
+                  sx={{
+                    color: item.text === 'Log Out' ? 'white' : 'inherit',
+                  }}
+                />
               </MenuItem>
             ))}
           </Menu>
@@ -165,7 +198,6 @@ const DashboardLayout = ({ children }) => {
           marginTop: 8, // Ustalamy margines, żeby nie zachodziło na AppBar
         }}
       >
-       
         {children}
       </Box>
     </Box>
