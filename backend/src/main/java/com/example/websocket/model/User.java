@@ -20,10 +20,12 @@ public abstract class User {
     protected String email;
     protected String password;
     protected Role role;
+    private String socialGoals;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "photo_id", referencedColumnName = "id")
     private Photo photo;
-//    private String description;
+    private String description;
+
 //    private String location;
 //    private String contactPerson;
 //    private String contactPhone;

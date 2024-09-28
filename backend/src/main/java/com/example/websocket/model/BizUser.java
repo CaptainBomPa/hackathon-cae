@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class BizUser extends User {
     private String strategies;
-    private String socialGoals;
     private BigDecimal budget;
     private String partners;
     private String grants;

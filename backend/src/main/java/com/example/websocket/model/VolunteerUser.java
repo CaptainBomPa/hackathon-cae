@@ -11,7 +11,6 @@ import lombok.*;
 public class VolunteerUser extends User {
     private String firstName;
     private String lastName;
-    private String description;
     private String hobbies;
 
     public VolunteerUser(UserDTO userDTO) {

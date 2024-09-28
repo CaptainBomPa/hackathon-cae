@@ -2,11 +2,15 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/backend/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/target" />
+      <excludeFolder url="file://$MODULE_DIR$/recommendation-system/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/recommendation-system/venv/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/recommendation-system/venv/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-  <component name="SonarLintModuleSettings">
-    <option name="uniqueId" value="bb3544cf-1e16-4a94-8166-e23ed8a62db7" />
   </component>
 </module>

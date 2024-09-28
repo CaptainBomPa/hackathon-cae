@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography, Button, TextField, Grid, Paper, Checkbox, FormControlLabel, Alert, Snackbar } from '@mui/material';
+import { Container, Box, Typography, Button, TextField, Grid, Paper, Alert, Snackbar, Avatar, IconButton } from '@mui/material';
 import DashboardLayout from '../components/DashboardLayout';
-import { categories } from '../data/categories';
-import { updateProfile, updatePassword, getUser } from '../services/userService';
+import { updateProfile, updatePassword, getUser, uploadPhoto } from '../services/userService';
 import { motion } from 'framer-motion'; // Import framer-motion
+import PhotoCamera from '@mui/icons-material/PhotoCamera'; // Ikona do przesyłania zdjęcia
 
 // Definicja animacji
 const pageVariants = {
@@ -16,72 +16,86 @@ const UserSettingsPage = () => {
   const [userData, setUserData] = useState({
     name: '',
     email: '',
-    description: '',
-    categories: [],
-    images: []
+    photoUrl: '',
   });
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [loggedInUserId, setLoggedInUserId] = useState(null); // Przechowywanie ID zalogowanego użytkownika
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const [showAlert, setShowAlert] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null); // Przechowywanie wybranego zdjęcia
 
+  // Przy pobraniu danych z localStorage zakładamy, że klucz 'user' przechowuje informacje o zalogowanym użytkowniku
   useEffect(() => {
-    // Zakładamy, że użytkownik o id=4 jest zalogowany
-    const fetchData = async () => {
-      try {
-        const user = await getUser(4); // Funkcja do pobierania danych użytkownika
-        setUserData(user);
-        setSelectedCategories(user.categories || []);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const handleCategoryChange = (category) => {
-    setSelectedCategories((prevCategories) =>
-      prevCategories.includes(category)
-        ? prevCategories.filter((cat) => cat !== category)
-        : [...prevCategories, category]
-    );
-  };
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setUserData({
+        ...userData,
+        name: user.name || '',
+        email: user.email || '',
+        photoUrl: user.photoUrl || '', // Jeśli jest przechowywany URL zdjęcia
+      });
+      setLoggedInUserId(user.id); // Ustawienie ID użytkownika z localStorage
+      console.log(user)
+    }
+  }, []); // Pusty array dependencies oznacza, że useEffect wykona się tylko raz po montażu komponentu
 
   const handleProfileUpdate = async () => {
+    if (!loggedInUserId) return; // Jeśli brak ID użytkownika, nie wykonujemy operacji
+
     try {
-      await updateProfile(4, { ...userData, categories: selectedCategories });
-      setAlertMessage('Dane użytkownika zostały zaktualizowane.');
+      await updateProfile(loggedInUserId, { name: userData.name, email: userData.email });
+      setAlertMessage('User information updated successfully.');
       setShowAlert(true);
     } catch (error) {
-      setAlertMessage('Błąd podczas aktualizacji danych.');
+      setAlertMessage('Error updating user information.');
       setShowAlert(true);
     }
   };
 
   const handlePasswordUpdate = async () => {
+    if (!loggedInUserId) return; // Jeśli brak ID użytkownika, nie wykonujemy operacji
+
     if (newPassword !== confirmPassword) {
-      setAlertMessage('Nowe hasła nie są zgodne.');
+      setAlertMessage('Passwords do not match.');
       setShowAlert(true);
       return;
     }
 
     try {
-      await updatePassword(4, { currentPassword, newPassword });
-      setAlertMessage('Hasło zostało zmienione.');
+      await updatePassword(loggedInUserId, { currentPassword, newPassword });
+      setAlertMessage('Password updated successfully.');
       setShowAlert(true);
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (error) {
-      setAlertMessage('Błąd podczas zmiany hasła.');
+      setAlertMessage('Error updating password.');
       setShowAlert(true);
     }
   };
 
   const handleCloseAlert = () => {
     setShowAlert(false);
+  };
+
+  const handlePhotoUpload = async () => {
+    if (!loggedInUserId || !selectedPhoto) return; // Jeśli brak ID użytkownika lub zdjęcia, nie wykonujemy operacji
+
+    const formData = new FormData();
+    formData.append('photo', selectedPhoto);
+
+    try {
+      const updatedUser = await uploadPhoto(loggedInUserId, formData);
+      setUserData(updatedUser); // Aktualizacja danych użytkownika z nowym zdjęciem
+      setAlertMessage('Profile photo updated successfully.');
+      setShowAlert(true);
+    } catch (error) {
+      setAlertMessage('Error uploading photo.');
+      setShowAlert(true);
+    }
   };
 
   return (
@@ -99,10 +113,10 @@ const UserSettingsPage = () => {
             <Grid item xs={12} md={6}>
               <Paper sx={{ padding: 2 }}>
                 <Typography variant="h6" gutterBottom>
-                  Informacje o firmie
+                  User Information
                 </Typography>
                 <TextField
-                  label="Nazwa"
+                  label="Name"
                   fullWidth
                   value={userData.name}
                   onChange={(e) => setUserData({ ...userData, name: e.target.value })}
@@ -115,31 +129,20 @@ const UserSettingsPage = () => {
                   onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                   sx={{ marginBottom: 2 }}
                 />
-                <TextField
-                  label="Opis"
-                  fullWidth
-                  multiline
-                  rows={4}
-                  value={userData.description}
-                  onChange={(e) => setUserData({ ...userData, description: e.target.value })}
-                  sx={{ marginBottom: 2 }}
-                />
-                <Typography variant="subtitle1" gutterBottom>
-                  Wybierz kategorie działalności:
-                </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                  {categories.map((category) => (
-                    <FormControlLabel
-                      key={category}
-                      control={
-                        <Checkbox
-                          checked={selectedCategories.includes(category)}
-                          onChange={() => handleCategoryChange(category)}
-                        />
-                      }
-                      label={category}
+                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                  <Avatar src={userData.photoUrl} sx={{ width: 80, height: 80, marginRight: 2 }} />
+                  <IconButton
+                    color="primary"
+                    component="label"
+                    sx={{ backgroundColor: '#82ff82', '&:hover': { backgroundColor: '#70e270' } }}
+                  >
+                    <PhotoCamera />
+                    <input
+                      type="file"
+                      hidden
+                      onChange={(e) => setSelectedPhoto(e.target.files[0])}
                     />
-                  ))}
+                  </IconButton>
                 </Box>
                 <Button
                   variant="contained"
@@ -148,8 +151,19 @@ const UserSettingsPage = () => {
                   sx={{ marginTop: 2, backgroundColor: '#82ff82', '&:hover': { backgroundColor: '#70e270' } }}
                   fullWidth
                 >
-                  Zaktualizuj dane
+                  Update Profile
                 </Button>
+                {selectedPhoto && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handlePhotoUpload}
+                    sx={{ marginTop: 2, backgroundColor: '#418cb5', '&:hover': { backgroundColor: '#3179a3' } }}
+                    fullWidth
+                  >
+                    Upload Photo
+                  </Button>
+                )}
               </Paper>
             </Grid>
 
@@ -157,10 +171,10 @@ const UserSettingsPage = () => {
             <Grid item xs={12} md={6}>
               <Paper sx={{ padding: 2 }}>
                 <Typography variant="h6" gutterBottom>
-                  Zmiana hasła
+                  Change Password
                 </Typography>
                 <TextField
-                  label="Aktualne hasło"
+                  label="Current Password"
                   type="password"
                   fullWidth
                   value={currentPassword}
@@ -168,7 +182,7 @@ const UserSettingsPage = () => {
                   sx={{ marginBottom: 2 }}
                 />
                 <TextField
-                  label="Nowe hasło"
+                  label="New Password"
                   type="password"
                   fullWidth
                   value={newPassword}
@@ -176,7 +190,7 @@ const UserSettingsPage = () => {
                   sx={{ marginBottom: 2 }}
                 />
                 <TextField
-                  label="Powtórz nowe hasło"
+                  label="Confirm New Password"
                   type="password"
                   fullWidth
                   value={confirmPassword}
@@ -190,7 +204,7 @@ const UserSettingsPage = () => {
                   sx={{ marginTop: 2, backgroundColor: '#82ff82', '&:hover': { backgroundColor: '#70e270' } }}
                   fullWidth
                 >
-                  Zmień hasło
+                  Change Password
                 </Button>
               </Paper>
             </Grid>
