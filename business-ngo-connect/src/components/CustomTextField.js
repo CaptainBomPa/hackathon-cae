@@ -4,7 +4,7 @@ import { TextField, styled } from '@mui/material';
 const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiInputBase-root': {
     backgroundColor: '#DCDCDC', // Ustaw tło na #DCDCDC
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: '20px',
   },
   '& .MuiOutlinedInput-notchedOutline': {
     borderColor: '#418CB5', // Kolor obramowania na #418CB5 (R65, G140, B181 w HEX)

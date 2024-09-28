@@ -30,10 +30,16 @@ const StringListInput = ({ label, value, onChange }) => {
           marginBottom: 1, 
           '& .MuiInputBase-root': {
             backgroundColor: '#DCDCDC', // Dopasowanie tła TextField
+            borderRadius: '20px',
+          
           }
         }}
       />
-      <Button variant="contained" onClick={handleAddItem} fullWidth sx={{ marginBottom: 1 }}>
+      <Button variant="contained" onClick={handleAddItem} fullWidth sx={{ 
+        marginBottom: 1,
+        borderRadius: '20px',
+        
+        }}>
         Add
       </Button>
       <List>

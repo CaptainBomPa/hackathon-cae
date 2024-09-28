@@ -11,6 +11,8 @@ import {
   ListItemIcon,
   ListItemText,
   Avatar,
+  Menu,
+  MenuItem,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -24,16 +26,33 @@ const drawerWidth = 240;
 const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
   };
 
+  const handleUserMenuOpen = (event) => {
+    setUserMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleUserMenuClose = () => {
+    setUserMenuAnchorEl(null);
+  };
+
+  const handleNavigate = (path) => {
+    handleUserMenuClose();
+    navigate(path);
+  };
+
   const menuItems = [
-    { text: 'Search Contacts', icon: <SearchIcon color='#418CB5'/>, path: '/main' },
-    { text: 'Chat', icon: <ChatIcon color='#418CB5'/>, path: '/chat' },
-    { text: 'Account Settings', icon: <SettingsIcon color='#418CB5'/>, path: '/settings' },
-    { text: 'Log Out', icon: <ExitToAppIcon color='#418CB5'/>, path: '/login' },
+    { text: 'Search Contacts', icon: <SearchIcon sx={{ color: '#418CB5' }} />, path: '/main' },
+    { text: 'Chat', icon: <ChatIcon sx={{ color: '#418CB5' }} />, path: '/chat' },
+  ];
+
+  const userMenuItems = [
+    { text: 'Account Settings', icon: <SettingsIcon />, path: '/settings' },
+    { text: 'Log Out', icon: <ExitToAppIcon />, path: '/login' },
   ];
 
   const drawer = (
@@ -45,7 +64,7 @@ const DashboardLayout = ({ children }) => {
         color: '#000',
       }}
     >
-      <List sx={{marginTop: 8}}>
+      <List sx={{ marginTop: 8 }}>
         {menuItems.map((item, index) => (
           <ListItem
             button
@@ -86,14 +105,36 @@ const DashboardLayout = ({ children }) => {
             component="img"
             src="/logo.png"
             alt="Logo"
-            sx={{ height: '84px', margin: '0 auto' }}
+            sx={{ height: '80px', margin: '0 auto' }} // Poprawiony rozmiar logo
           />
           <IconButton
             color="inherit"
+            onClick={handleUserMenuOpen}
             sx={{ color: '#000' }}
           >
             <Avatar />
           </IconButton>
+          <Menu
+            anchorEl={userMenuAnchorEl}
+            open={Boolean(userMenuAnchorEl)}
+            onClose={handleUserMenuClose}
+            anchorOrigin={{
+              vertical: 'bottom', // Menu otwiera się na dole ikony
+              horizontal: 'right', // Menu otwiera się na prawo od ikony
+            }}
+            transformOrigin={{
+              vertical: 'top', // Menu zaczyna się od góry
+              horizontal: 'right', // Menu zaczyna się od prawej strony
+            }}
+            keepMounted
+          >
+            {userMenuItems.map((item, index) => (
+              <MenuItem key={index} onClick={() => handleNavigate(item.path)}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </MenuItem>
+            ))}
+          </Menu>
         </Toolbar>
       </AppBar>
 
