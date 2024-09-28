@@ -3,6 +3,7 @@ package com.example.websocket.controller;
 import com.example.websocket.model.*;
 import com.example.websocket.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,7 +42,7 @@ public class UserController {
         return userService.getAllMatchedUsers(userId);
     }
 
-    @PutMapping("/addPhoto/{id}")
+    @PutMapping(value = "/addPhoto/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<User> addPhoto(
             @PathVariable Long id,
             @RequestParam MultipartFile file) throws IOException {
