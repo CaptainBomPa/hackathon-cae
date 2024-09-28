@@ -2,13 +2,12 @@ package com.example.websocket.model;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Entity
 @DiscriminatorValue("NGO")
+@NoArgsConstructor
 public class NgoUser extends User {
 
     private String strategies;

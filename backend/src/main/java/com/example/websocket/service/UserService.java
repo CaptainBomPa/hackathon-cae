@@ -41,7 +41,7 @@ public class UserService {
                 .map(Optional::get).map(UserDTO::new).toList();
     }
 
-    public User addPhoto(Long userId, MultipartFile file) throws IOException {
+    public User     addPhoto(Long userId, MultipartFile file) throws IOException {
         Optional<User> existingUserOpt = userRepository.findById(userId);
 
         if (existingUserOpt.isPresent()) {
