@@ -13,39 +13,39 @@ class Database:
 
     def get_ngo_by_id(self, ngo_id):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM ngo where id = %s", ngo_id)
+        cursor.execute("SELECT * FROM user where id = %s", ngo_id)
         ngo = cursor.fetchone()
-        return NGO(ngo[0], ngo[1], ngo[2], ngo[3], ngo[4])
+        return NGO(ngo[1], ngo[4], ngo[3], ngo[7], ngo[2], ngo[12], ngo[14], ngo[13])
 
     def get_ngos(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM ngo LIMIT 50")
+        cursor.execute("SELECT * FROM user WHERE user_type = 'NGO' LIMIT 50")
         ngos_db = cursor.fetchall()
-        return [NGO(ngo[0], ngo[1], ngo[2], ngo[3], ngo[4]) for ngo in ngos_db]
+        return [NGO(ngo[1], ngo[4], ngo[3], ngo[7], ngo[2], ngo[12], ngo[14], ngo[13]) for ngo in ngos_db]
 
     def get_company_by_id(self, company_id):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM company where id = %s", company_id)
+        cursor.execute("SELECT * FROM user where id = %s", company_id)
         company = cursor.fetchone()
-        return Company(company[0], company[1], company[2], company[3], company[4])
+        return Company(company[1], company[4], company[3], company[7], company[2], company[12], company[8], company[11], company[10], company[9])
 
     def get_companies(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM company LIMIT 50")
+        cursor.execute("SELECT * FROM user WHERE user_type = 'BUSINESS' LIMIT 50")
         companies_db = cursor.fetchall()
-        return [Company(company[0], company[1], company[2], company[3], company[4]) for company in companies_db]
+        return [Company(company[1], company[4], company[3], company[7], company[2], company[12], company[8], company[11], company[10], company[9]) for company in companies_db]
 
     def get_volunteer_by_id(self, volunteer_id):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM volunteer where id = %s", volunteer_id)
+        cursor.execute("SELECT * FROM user where id = %s", volunteer_id)
         volunteer = cursor.fetchone()
-        return Volunteer(volunteer[0], volunteer[1], volunteer[2], volunteer[3], volunteer[4])
+        return Volunteer(volunteer[1], volunteer[4], volunteer[3], volunteer[7], volunteer[2], volunteer[17], volunteer[15])
 
     def get_volunteers(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM volunteer LIMIT 50")
+        cursor.execute("SELECT * FROM user WHERE user_type = 'VOLUNTEER' LIMIT 50")
         volunteers_db = cursor.fetchall()
-        return [Company(volunteer[0], volunteer[1], volunteer[2], volunteer[3], volunteer[4]) for volunteer in volunteers_db]
+        return [Volunteer(volunteer[1], volunteer[4], volunteer[3], volunteer[7], volunteer[2], volunteer[17], volunteer[15]) for volunteer in volunteers_db]
 
 db = Database(database="root",
               host="localhost",

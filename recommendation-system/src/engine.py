@@ -31,7 +31,7 @@ class RecommendationEngine:
 
         return self._get_recommendations(df_ngo, companies, df_companies)
 
-    def get_volunteers_for_ngo(self, ngo, companies):
+    def get_volunteers_for_ngo(self, ngo, volunteers):
         ngo_data =  {
             'strategy': [ngo.strategy],
             'experience': [ngo.experience],
