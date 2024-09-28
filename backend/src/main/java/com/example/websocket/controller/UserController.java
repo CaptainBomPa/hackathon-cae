@@ -1,6 +1,7 @@
-package com.example.websocket.user;
+package com.example.websocket.controller;
 
 import com.example.websocket.model.*;
+import com.example.websocket.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +31,8 @@ public class UserController {
                 .orElse(null);
     }
 
-    @GetMapping
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
+    @GetMapping("/match")
+    public List<UserDTO> getAllMatchedUsers(@RequestParam Long userId) {
+        return userService.getAllMatchedUsers(userId);
     }
 }
