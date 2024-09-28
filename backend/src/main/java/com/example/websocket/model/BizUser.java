@@ -1,32 +1,25 @@
 package com.example.websocket.model;
-import com.example.websocket.model.enums.BizService;
-import jakarta.persistence.*;
+
+import com.example.websocket.model.enums.CompanySize;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
 @Entity
 @DiscriminatorValue("BIZ")
 public class BizUser extends User {
-
-    @ElementCollection
-    @CollectionTable(name = "biz_user_services", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "service")
-    private Set<String> services = new HashSet<>();
-
-    public void addService(BizService service) {
-        services.add(service.name());
-    }
-
-    public Set<BizService> getServices() {
-        Set<BizService> enumServices = new HashSet<>();
-        for (String serviceName : services) {
-            enumServices.add(BizService.valueOf(serviceName));
-        }
-        return enumServices;
-    }
+    private String strategies;
+    private String socialGoals;
+    private BigDecimal budget;
+    private String partners;
+    private String grants;
+    @Enumerated(EnumType.STRING)
+    private CompanySize companySize;
 }

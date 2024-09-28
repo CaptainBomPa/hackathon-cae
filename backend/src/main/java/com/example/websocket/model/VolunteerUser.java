@@ -10,6 +10,8 @@ import lombok.Setter;
 @Entity
 @DiscriminatorValue("VOLUNTEER")
 public class VolunteerUser extends User {
-
-
+    private String firstName;
+    private String lastName;
+    private String description;
+    private String hobbies;
 }
