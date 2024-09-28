@@ -1,9 +1,6 @@
 package com.example.websocket.service;
 
-import com.example.websocket.model.Photo;
-import com.example.websocket.model.Swipe;
-import com.example.websocket.model.User;
-import com.example.websocket.model.UserDTO;
+import com.example.websocket.model.*;
 import com.example.websocket.repository.SwipeRepository;
 import com.example.websocket.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +38,7 @@ public class UserService {
                 .map(Optional::get).map(UserDTO::new).toList();
     }
 
-    public User     addPhoto(Long userId, MultipartFile file) throws IOException {
+    public User addPhoto(Long userId, MultipartFile file) throws IOException {
         Optional<User> existingUserOpt = userRepository.findById(userId);
 
         if (existingUserOpt.isPresent()) {
@@ -66,9 +63,28 @@ public class UserService {
         Optional<User> existingUserOpt = userRepository.findById(userId);
 
         if (existingUserOpt.isPresent()) {
-            return existingUserOpt.get().getPhoto().getPhoto();
+            var photo =  existingUserOpt.get().getPhoto();
+            if (photo != null) {
+                return photo.getPhoto();
+            }
+            return null;
         } else {
             throw new RuntimeException("User not found with ID: " + userId);
         }
+    }
+
+    public User update(User user) {
+        User savedUser = userRepository.findById(user.getId()).orElseThrow(() -> new IllegalStateException("User not found to add additional info."));
+        if (savedUser instanceof BizUser repoUser) {
+            BizUser incomingBizUser = (BizUser) user;
+            repoUser.merge(incomingBizUser);
+        } else if (savedUser instanceof NgoUser repoUser) {
+            NgoUser incomingNgoUser = (NgoUser) user;
+            repoUser.merge(incomingNgoUser);
+        } else if (savedUser instanceof VolunteerUser repoUser) {
+            VolunteerUser incomingVolUser = (VolunteerUser) user;
+            repoUser.merge(incomingVolUser);
+        }
+        return userRepository.save(savedUser);
     }
 }

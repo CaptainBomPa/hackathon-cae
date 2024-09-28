@@ -5,13 +5,14 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
 @Entity
-@DiscriminatorValue("BIZ")
+@DiscriminatorValue("BUSINESS")
 @NoArgsConstructor
 public class BizUser extends User {
     private String strategies;
@@ -23,5 +24,19 @@ public class BizUser extends User {
 
     public BizUser(UserDTO userDTO) {
         super(userDTO);
+        this.partners = userDTO.getPartners();
+        this.budget = userDTO.getBudget();
+        this.grants = userDTO.getGrants();
+        this.strategies = userDTO.getStrategies();
+        this.companySize = userDTO.getCompanySize();
+    }
+
+    public void merge(BizUser bizUser) {
+        super.merge(bizUser);
+        this.partners = bizUser.getPartners();
+        this.budget = bizUser.getBudget();
+        this.grants = bizUser.getGrants();
+        this.strategies = bizUser.getStrategies();
+        this.companySize = bizUser.getCompanySize();
     }
 }

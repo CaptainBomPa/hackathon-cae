@@ -77,6 +77,7 @@ public final class DatabaseInitializer implements CommandLineRunner {
             biz.setName("Biz User" + i);
             biz.setEmail("biz" + i + "@example.com");
             biz.setPassword("biz");
+            biz.setDescription("bizDescription");
             biz.setRole(Role.BUSINESS);
             biz.setStrategies(bizStrategies[i]);
             biz.setSocialGoals(bizSocialGoals[i]);
@@ -89,6 +90,7 @@ public final class DatabaseInitializer implements CommandLineRunner {
             ngo.setName("Ngo User" + i);
             ngo.setEmail("ngo" + i + "@example.com");
             ngo.setPassword("ngo");
+            ngo.setDescription("ngoDescription");
             ngo.setRole(Role.NGO);
             ngo.setStrategies(ngoStrategies[i]);
             ngo.setProjects(ngoProjects[i]);
@@ -100,6 +102,7 @@ public final class DatabaseInitializer implements CommandLineRunner {
             vol.setEmail("vol" + i + "@example.com");
             vol.setPassword("vol");
             vol.setRole(Role.VOLUNTEER);
+            vol.setDescription("volDescription");
 
             userRepository.save(biz);
             userRepository.save(ngo);
