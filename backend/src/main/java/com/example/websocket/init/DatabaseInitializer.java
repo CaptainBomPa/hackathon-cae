@@ -23,6 +23,10 @@ public final class DatabaseInitializer implements CommandLineRunner {
     private final SwipeRepository swipeRepository;
     private final ChatMessageRepository chatMessageRepository;
 
+    private List<BizUser> bizUsers = new ArrayList<>();
+    private List<NgoUser> ngoUsers = new ArrayList<>();
+    private List<VolunteerUser> volunteerUsers = new ArrayList<>();
+
     private List<Long> messageSenderIds = List.of(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L);
 
     private List<Long> messageReceiverIds = new ArrayList<>(Arrays.asList(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L));
@@ -160,6 +164,11 @@ public final class DatabaseInitializer implements CommandLineRunner {
                 "4 years providing skill development training.",
                 "Improve employment opportunities through education.",
                 "Focused on equipping individuals with the skills needed for today’s job market."));
+
+        ngoUsers.addAll(userRepository.findAll().stream()
+                .filter(NgoUser.class::isInstance)
+                .map(NgoUser.class::cast)
+                .toList());
     }
 
     private void createBizUsers() {
@@ -270,6 +279,11 @@ public final class DatabaseInitializer implements CommandLineRunner {
                 new BigDecimal("350000.00"),
                 CompanySize.REGIONAL,
                 "Investing in youth to drive positive change in communities."));
+
+        bizUsers.addAll(userRepository.findAll().stream()
+                .filter(BizUser.class::isInstance)
+                .map(BizUser.class::cast)
+                .toList());
     }
 
     private void createVolunteerUsers() {
@@ -365,6 +379,11 @@ public final class DatabaseInitializer implements CommandLineRunner {
                 "3 years of experience in educational content creation",
                 "Support educational equity through storytelling.",
                 "Excited to share inspiring stories that educate and uplift."));
+
+        volunteerUsers.addAll(userRepository.findAll().stream()
+                .filter(VolunteerUser.class::isInstance)
+                .map(VolunteerUser.class::cast)
+                .toList());
 
     }
 
