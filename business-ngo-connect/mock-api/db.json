@@ -7,15 +7,7 @@
       "password": "Test123!",
       "type": "business",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pellentesque tristique libero, et placerat eros sagittis sit amet. Aenean molestie mauris ex, vitae laoreet risus gravida non. Proin condimentum, dui id rhoncus mollis, dui mi sagittis tellus, ac luctus felis purus tincidunt purus. Fusce dapibus magna sapien, id luctus augue ullamcorper sed. Aliquam turpis dolor, venenatis tincidunt mattis id, porta nec libero. Proin sed ipsum at nisl mattis faucibus ac ut odio. In quis accumsan quam.",
-      "categories": [
-        "Technologia",
-        "Rozwój ekonomiczny",
-        "Nauka i badania"
-      ],
-      "images": [
-        "1726910482385-1.jpg",
-        "1726910482385-2.png"
-      ]
+      "images": "1726910482385-1.jpg"
     },
     {
       "id": 2,
@@ -24,20 +16,7 @@
       "password": "Test123!",
       "type": "business",
       "description": "Fusce porta luctus erat ut sagittis. Nunc pulvinar mollis elit in luctus. Nullam non orci sodales sapien rutrum faucibus eget eget mauris. Sed et dolor et nunc eleifend convallis. Mauris consectetur porta nisi sed euismod. Sed pretium mollis ipsum, vel feugiat tellus mollis et. Nunc varius pulvinar arcu, ut euismod purus pulvinar in. Vestibulum non lacus et felis elementum volutpat eget ac neque. In imperdiet dignissim ex et tincidunt. Etiam mauris dolor, rutrum quis cursus a, condimentum in dolor.",
-      "categories": [
-        "Kultura",
-        "Turystyka",
-        "Transport i logistyka",
-        "Środowisko",
-        "Energetyka odnawialna",
-        "Urbanistyka i planowanie",
-        "Pomoc humanitarna",
-        "Zwalczanie ubóstwa"
-      ],
-      "images": [
-        "1726910559743-4.jpg",
-        "1726910559743-5.jpg"
-      ]
+      "images": "1726910559743-4.jpg"
     },
     {
       "id": 3,
@@ -46,15 +25,7 @@
       "password": "Test123!",
       "type": "business",
       "description": "Praesent nulla metus, vehicula et diam sed, placerat viverra turpis. Morbi ut laoreet nisi, vel lobortis lacus. Suspendisse maximus tincidunt ipsum a pharetra. Etiam laoreet neque eu nunc bibendum, eget interdum justo vulputate. Morbi egestas efficitur magna, quis hendrerit justo tempus ut. Etiam quis arcu dui. Praesent suscipit metus ac condimentum maximus. Integer eros velit, rhoncus ut lorem quis, auctor sollicitudin metus. Vestibulum et dapibus justo, a commodo nisi.",
-      "categories": [
-        "Zdrowie",
-        "Edukacja",
-        "Nauka i badania"
-      ],
-      "images": [
-        "1726910657279-7.jpg",
-        "1726910657279-8.jpg"
-      ]
+      "images": "1726910657279-7.jpg"
     },
     {
       "id": 4,
@@ -68,138 +39,77 @@
         "'Prawa człowieka",
         "Innowacje społeczne"
       ],
-      "images": [
-        "1726910737005-6.png"
-      ]
-    },
-    {
-      "id": 5,
-      "name": "adsadasd",
-      "email": "dasda@bgvdrg",
-      "password": "Test!123",
-      "type": "ngo",
-      "images": []
-    },
-    {
-      "id": 6,
-      "name": "imie",
-      "email": "imie@test",
-      "password": "Test!123",
-      "type": "ngo",
-      "images": []
-    },
-    {
-      "id": 7,
-      "name": "test",
-      "email": "test@tes",
-      "password": "Test!123",
-      "type": "ngo",
-      "images": []
-    },
-    {
-      "id": 8,
-      "name": "test",
-      "email": "test@tes12",
-      "password": "Test!123",
-      "type": "ngo",
-      "images": []
-    },
-    {
-      "id": 9,
-      "name": "test",
-      "email": "xdxd@xd",
-      "password": "Test!123",
-      "type": "ngo",
-      "images": []
-    },
-    {
-      "id": 10,
-      "name": "test",
-      "email": "test@testestsets",
-      "password": "Test!123",
-      "type": "business",
-      "images": []
-    },
-    {
-      "id": 11,
-      "name": "test",
-      "email": "test@tgerdfgerhj",
-      "password": "tEST!123",
-      "type": "ngo",
-      "images": []
-    },
-    {
-      "id": 12,
-      "name": "testes",
-      "email": "tes@gterghre",
-      "password": "Test!123",
-      "type": "ngo",
-      "images": []
-    },
-    {
-      "id": 13,
-      "name": "test",
-      "email": "test@gdrgehoriuehjr",
-      "password": "Test!123",
-      "type": "business",
-      "description": "",
-      "images": []
-    }
-  ],
-  "relations": [
-    {
-      "id": 1,
-      "userId1": 2,
-      "userId2": 4
-    },
-    {
-      "id": 2,
-      "userId1": 3,
-      "userId2": 4
+      "images": "1726910737005-6.png"
     }
   ],
   "messages": [
     {
       "id": 1,
-      "relationId": 1,
-      "message": "Cześć! Jak się masz?",
+      "senderId": 2,
+      "receiverId": 4,
+      "content": "Cześć! Jak się masz?",
       "timestamp": "2024-09-21T12:34:56Z",
-      "senderId": 2
+      "isRead": false
     },
     {
       "id": 2,
-      "relationId": 1,
-      "message": "Wszystko dobrze! A u Ciebie?",
+      "senderId": 4,
+      "receiverId": 2,
+      "content": "Wszystko dobrze! A u Ciebie?",
       "timestamp": "2024-09-21T12:36:00Z",
-      "senderId": 4
+      "isRead": false
     },
     {
       "id": 3,
-      "relationId": 2,
-      "message": "Cześć! Słyszałem o waszym projekcie.",
+      "senderId": 3,
+      "receiverId": 4,
+      "content": "Cześć! Słyszałem o waszym projekcie.",
       "timestamp": "2024-09-21T13:00:00Z",
-      "senderId": 3
+      "isRead": false
     },
     {
       "id": 4,
-      "relationId": 2,
-      "message": "Dzięki! Cieszymy się, że się interesujesz.",
+      "senderId": 4,
+      "receiverId": 3,
+      "content": "Dzięki! Cieszymy się, że się interesujesz.",
       "timestamp": "2024-09-21T13:02:00Z",
-      "senderId": 4
+      "isRead": false
     },
     {
       "id": 5,
-      "relationId": 1,
-      "message": "Też dobrze. Kiedy nawiązujemy jakąś współprace?",
+      "senderId": 2,
+      "receiverId": 4,
+      "content": "Też dobrze. Kiedy nawiązujemy jakąś współprace?",
       "timestamp": "2024-09-21T11:53:12.778Z",
-      "senderId": 2
+      "isRead": false
     },
     {
       "id": 6,
-      "relationId": 1,
-      "message": "Słuchaj no, możemy już dziś, wszystko dzięki tej wspaniałem platformie!",
+      "senderId": 4,
+      "receiverId": 2,
+      "content": "Słuchaj no, możemy już dziś, wszystko dzięki tej wspaniałem platformie!",
       "timestamp": "2024-09-21T11:54:01.778Z",
-      "senderId": 4
+      "isRead": false
+    }
+  ],
+  "match": [
+    {
+      "id": 1,
+      "userId1": 1,
+      "userId2": 4,
+      "status": "matched"
+    },
+    {
+      "id": 2,
+      "userId1": 2,
+      "userId2": 4,
+      "status": "matched"
+    },
+    {
+      "id": 3,
+      "userId1": 3,
+      "userId2": 4,
+      "status": "matched"
     }
   ]
 }

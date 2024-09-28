@@ -95,6 +95,7 @@ const LoginPage = () => {
                 '& .MuiInputLabel-root': {
                   fontSize: '18px', // Zwiększenie rozmiaru etykiety
                 },
+                
               }}
             />
             <CustomTextField 
@@ -115,7 +116,9 @@ const LoginPage = () => {
                 },
                 '& .MuiInputLabel-root': {
                   fontSize: '18px', // Zwiększenie rozmiaru etykiety
+                  borderRadius: '20px'
                 },
+                
               }}
             />
             <Box mt={3}> {/* Zwiększenie odstępu */}
@@ -128,7 +131,8 @@ const LoginPage = () => {
                   backgroundColor: '#6D6D6D', 
                   '&:hover': { backgroundColor: '#5c5c5c' }, 
                   fontSize: '20px', // Zwiększenie rozmiaru czcionki przycisku
-                  padding: '12px 0' // Zwiększenie paddingu przycisku
+                  padding: '12px 0', // Zwiększenie paddingu przycisku
+                  borderRadius: '20px'
                 }}
               >
                 Log in

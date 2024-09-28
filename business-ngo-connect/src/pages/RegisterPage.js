@@ -129,13 +129,14 @@ const RegisterPage = () => {
         <Box
           sx={{
             backgroundColor: "#8F8F8F",
-            padding: 5, // Zmniejszenie paddingu, aby więcej zawartości było widoczne
+            padding: 7, // Zmniejszenie paddingu, aby więcej zawartości było widoczne
             borderRadius: "20px", // Zaokrąglenie rogów formularza
             textAlign: "center",
             width: "100%",
             maxWidth: "600px", // Zwiększenie maksymalnej szerokości formularza
-            height: showAdditionalForm ? "90vh" : "auto", // Większa wysokość dla dodatkowego formularza
-            overflow: "hidden", // Ukrycie scrolla w sekcji
+            height: showAdditionalForm ? "90vh" : "90vh", // Większa wysokość dla dodatkowego formularza
+            overflow: "auto", // Ukrycie scrolla w sekcji
+
           }}
         >
           {/* Logo */}
@@ -240,7 +241,10 @@ const RegisterPage = () => {
               />
 
               {/* Dodanie wyboru roli */}
-              <FormControl fullWidth sx={{ marginY: 2 }}>
+              <FormControl fullWidth sx={{ 
+                marginY: 2 ,
+                
+                }}>
                 <InputLabel id="role-select-label">Role</InputLabel>
                 <Select
                   labelId="role-select-label"
@@ -252,6 +256,7 @@ const RegisterPage = () => {
                   }}
                   sx={{
                     backgroundColor: "#DCDCDC", // Ustawienie tła na #DCDCDC
+                    borderRadius: '20px'
                   }}
                 >
                   <MenuItem value="">
@@ -276,7 +281,8 @@ const RegisterPage = () => {
                     backgroundColor: "#6D6D6D",
                     "&:hover": { backgroundColor: "#5c5c5c" },
                     fontSize: "20px", // Zwiększenie rozmiaru czcionki przycisku
-                    padding: "12px 0", // Zwiększenie paddingu przycisku
+                    // padding: "12px 0", // Zwiększenie paddingu przycisku
+                    borderRadius: '20px'
                   }}
                 >
                   Next
@@ -289,17 +295,7 @@ const RegisterPage = () => {
               sx={{
                 height: "70vh", // Stała wysokość sekcji z dodatkowymi polami
                 overflowY: "auto", // Scroll w pionie
-                paddingRight: 2, // Dodanie miejsca na scrollbar
-                "&::-webkit-scrollbar": {
-                  width: "8px", // Szerokość scrollbar
-                },
-                "&::-webkit-scrollbar-track": {
-                  backgroundColor: "#e0e0e0", // Tło scrollbar
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  backgroundColor: "#6D6D6D", // Kolor suwaka
-                  borderRadius: "4px", // Zaokrąglenie suwaka
-                },
+
               }}
             >
               <Typography variant="h5" gutterBottom>
