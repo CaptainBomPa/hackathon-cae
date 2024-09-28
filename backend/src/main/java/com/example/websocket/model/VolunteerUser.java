@@ -12,6 +12,7 @@ public class VolunteerUser extends User {
     private String firstName;
     private String lastName;
     private String hobbies;
+    private String experience;
 
     public VolunteerUser(UserDTO userDTO) {
         super(userDTO);
