@@ -76,9 +76,9 @@ public final class DatabaseInitializer implements CommandLineRunner {
             new BigDecimal("100000.00")
     };
 
-    private List<Long> messageSenderIds = List.of(0L, 1L, 2L);
+    private List<Long> messageSenderIds = List.of(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L);
 
-    private List<Long> messageReceiverIds = new ArrayList<>(Arrays.asList(0L, 1L, 2L));
+    private List<Long> messageReceiverIds = new ArrayList<>(Arrays.asList(0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L));
 
     private List<String> messageContents = Arrays.asList(
             "siemanko, co tam?",
@@ -163,7 +163,7 @@ public final class DatabaseInitializer implements CommandLineRunner {
     }
 
     private void generateMessages() {
-        for (int i = 0; i < 80; i++) {
+        for (int i = 0; i < 300; i++) {
             ChatMessage message = new ChatMessage();
             message.setId((long) i);
             message.setRead(getRandomValue(messagesAreRead));
