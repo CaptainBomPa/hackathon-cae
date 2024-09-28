@@ -18,7 +18,7 @@ import CustomTextField from "../components/CustomTextField";
 import StringListInput from "../components/StringListInput"; // Import nowego komponentu
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { register } from "../services/authService"; // Import funkcji rejestracji
+import { registerUser, updateUserData } from "../services/authService"; // Import funkcji rejestracji i aktualizacji
 
 // Schemat walidacji z yup
 const validationSchema = yup.object({
@@ -77,20 +77,44 @@ const RegisterPage = () => {
           password: values.password,
           role: values.role.toUpperCase(),
         };
-        console.log(userData);
-        const registeredUser = await register(userData);
-
-        // Zapisanie zwróconego ID użytkownika
-        setUserId(registeredUser.id);
-
-        // Przejście do dodatkowego formularza
-        setShowAdditionalForm(true);
+        if (!showAdditionalForm) {
+          const registeredUser = await registerUser(userData);
+          setUserId(registeredUser.id);
+          setShowAdditionalForm(true);
+        }
       } catch (error) {
         setAlertMessage(error.message || "Registration failed");
         setShowAlert(true);
       }
     },
   });
+
+  // Funkcja do przesyłania dodatkowych danych użytkownika
+  const handleAdditionalSubmit = async () => {
+    try {
+      // Formatuj listy jako pojedyncze stringi oddzielone przecinkami
+      const formattedAdditionalData = {
+        ...additionalData,
+        strategies: additionalData.strategies.join(', '), // Konwertowanie listy na string
+        projects: additionalData.projects.join(', '), // Konwertowanie listy na string
+        goals: additionalData.goals.join(', '), // Konwertowanie listy na string
+        partners: additionalData.partners.join(', '), // Konwertowanie listy na string
+        grants: additionalData.grants.join(', '), // Konwertowanie listy na string
+      };
+
+      const completeUserData = {
+        id: userId, // Przekazanie ID zarejestrowanego użytkownika
+        role: formik.values.role.toUpperCase(),
+        ...formattedAdditionalData, // Dołączenie sformatowanych dodatkowych danych
+      };
+
+      await updateUserData(completeUserData); // Przesłanie dodatkowych danych
+      navigate("/login"); // Przekierowanie na stronę logowania
+    } catch (error) {
+      setAlertMessage(error.message || "Failed to update additional data");
+      setShowAlert(true);
+    }
+  };
 
   // Obsługa zamknięcia alertu
   const handleCloseAlert = () => {
@@ -270,12 +294,11 @@ const RegisterPage = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  onClick={() => setShowAdditionalForm(true)} // Zmieniamy stan na showAdditionalForm
+                  onClick={formik.handleSubmit} // Wywołanie funkcji onSubmit w Formiku
                   sx={{
                     backgroundColor: "#6D6D6D",
                     "&:hover": { backgroundColor: "#5c5c5c" },
                     fontSize: "20px", // Zwiększenie rozmiaru czcionki przycisku
-                    // padding: "12px 0", // Zwiększenie paddingu przycisku
                     borderRadius: "20px",
                   }}
                 >
@@ -436,13 +459,11 @@ const RegisterPage = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  onClick={formik.handleSubmit} // Finalizacja rejestracji z dodatkowymi danymi
+                  onClick={handleAdditionalSubmit} // Przesyłanie dodatkowych danych
                   sx={{
                     backgroundColor: "#6D6D6D",
                     "&:hover": { backgroundColor: "#5c5c5c" },
                     fontSize: "20px", // Zwiększenie rozmiaru czcionki przycisku
-                    // padding: "100px 0", // Zwiększenie paddingu przycisku
-                    // marginBottom: 12,
                     position: "sticky", // Sticky button
                     bottom: 0, // Sticky na dole
                     marginTop: 2, // Odstęp od reszty
