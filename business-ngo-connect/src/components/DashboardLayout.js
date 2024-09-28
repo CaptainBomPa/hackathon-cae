@@ -105,7 +105,7 @@ const DashboardLayout = ({ children }) => {
             component="img"
             src="/logo.png"
             alt="Logo"
-            sx={{ height: '50px', margin: '0 auto' }} // Poprawiony rozmiar logo
+            sx={{ height: '80px', margin: '0 auto' }} // Poprawiony rozmiar logo
           />
           <IconButton
             color="inherit"
