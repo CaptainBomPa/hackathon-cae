@@ -18,6 +18,9 @@ public abstract class User {
     protected String email;
     protected String password;
     protected Role role;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "photo_id", referencedColumnName = "id")
+    private Photo photo;
 //    private String description;
 //    private String location;
 //    private String contactPerson;
@@ -28,6 +31,6 @@ public abstract class User {
         this.name = userDTO.getName();
         this.email = userDTO.getEmail();
         this.password = userDTO.getPassword();
-        this.role = userDTO.getRole();
+        this.role = Role.valueOf(userDTO.getRole());
     }
 }

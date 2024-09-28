@@ -1,5 +1,6 @@
 package com.example.websocket.service;
 
+import com.example.websocket.model.Photo;
 import com.example.websocket.model.Swipe;
 import com.example.websocket.model.User;
 import com.example.websocket.model.UserDTO;
@@ -7,7 +8,9 @@ import com.example.websocket.repository.SwipeRepository;
 import com.example.websocket.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,5 +39,27 @@ public class UserService {
                 .map(swipe -> userRepository.findById(swipe.getPartnerId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get).map(UserDTO::new).toList();
+    }
+
+    public User addPhoto(Long userId, MultipartFile file) throws IOException {
+        Optional<User> existingUserOpt = userRepository.findById(userId);
+
+        if (existingUserOpt.isPresent()) {
+            User existingUser = existingUserOpt.get();
+
+            if (file != null && !file.isEmpty()) {
+                if (existingUser.getPhoto() == null) {
+                    Photo photo = new Photo();
+                    photo.setPhoto(file.getBytes());
+                    existingUser.setPhoto(photo);
+                } else {
+                    existingUser.getPhoto().setPhoto(file.getBytes());
+                }
+            }
+
+            return userRepository.save(existingUser);
+        } else {
+            throw new RuntimeException("User not found with ID: " + userId);
+        }
     }
 }

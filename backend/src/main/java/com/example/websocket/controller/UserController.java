@@ -3,8 +3,11 @@ package com.example.websocket.controller;
 import com.example.websocket.model.*;
 import com.example.websocket.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +19,7 @@ public class UserController {
 
     @PostMapping("/register")
     public UserDTO register(@RequestBody UserDTO userDTO) {
-        User user = switch (userDTO.getRole()) {
+        User user = switch (Role.fromString(userDTO.getRole())) {
             case BIZ -> userService.register(new BizUser(userDTO));
             case NGO -> userService.register(new NgoUser(userDTO));
             case VOLUNTEER -> userService.register(new VolunteerUser(userDTO));
@@ -37,4 +40,13 @@ public class UserController {
     public List<UserDTO> getAllMatchedUsers(@RequestParam Long userId) {
         return userService.getAllMatchedUsers(userId);
     }
+
+    @PutMapping("/addPhoto/{id}")
+    public ResponseEntity<User> addPhoto(
+            @PathVariable Long id,
+            @RequestParam MultipartFile file) throws IOException {
+        User updatedUser = userService.addPhoto(id, file);
+        return ResponseEntity.ok(updatedUser);
+    }
+
 }
