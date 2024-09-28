@@ -13,7 +13,6 @@ public class NgoUser extends User {
     private String strategies;
     private String projects;
     private String projectExperience;
-    private String socialGoals;
 
     public NgoUser(UserDTO userDTO) {
         super(userDTO);
