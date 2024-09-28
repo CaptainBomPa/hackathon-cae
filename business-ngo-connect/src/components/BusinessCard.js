@@ -77,7 +77,7 @@ const BusinessCard = ({ id, name, email, image, description, onSwipeLeft, onSwip
         <CardMedia
           component="img"
           height="300"
-          src={`http://localhost:4000/api/${id}`}
+          src={`http://localhost:4000/api/user/photo/${id}`}
           alt={`${name} image`}
           sx={{ borderRadius: '16px 16px 0 0' }}
         />
@@ -88,6 +88,9 @@ const BusinessCard = ({ id, name, email, image, description, onSwipeLeft, onSwip
         </Typography>
         <Typography variant="body2" color="textSecondary">
           {description}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          Email: {email}
         </Typography>
       </CardContent>
     </motion.div>

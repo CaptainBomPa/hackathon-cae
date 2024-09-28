@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Typography, Box, List, ListItem, ListItemText, Paper, TextField, IconButton, Avatar } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Typography, Box, List, ListItem, ListItemText, Paper, TextField, IconButton, Avatar, Divider } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import DashboardLayout from '../components/DashboardLayout';
-import { getMatchedUsers, getMessages, sendMessage, connectWebSocket, disconnectWebSocket } from '../services/chatService'; // Updated imports
-import { motion } from 'framer-motion'; // Import framer-motion
+import { getMatchedUsers, getMessages, sendMessage, connectWebSocket, disconnectWebSocket } from '../services/chatService';
+import { getUserPhoto } from '../services/photoService'; // Import funkcji do pobierania zdjęć
+import { motion } from 'framer-motion';
 
 const pageVariants = {
   initial: { opacity: 0, scale: 0.8 },
@@ -16,6 +17,7 @@ const ChatPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [userPhoto, setUserPhoto] = useState(null); // Stan do przechowywania zdjęcia użytkownika
   const loggedInUserId = 4; // Logged in user
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const ChatPage = () => {
       }
     };
     fetchMatchedUsers();
-    
+
     // Connect to WebSocket when component loads
     connectWebSocket(loggedInUserId, handleMessageReceived);
 
@@ -49,6 +51,16 @@ const ChatPage = () => {
         }
       };
       fetchMessages();
+
+      const fetchUserPhoto = async () => {
+        try {
+          const photoUrl = await getUserPhoto(selectedUser.id);
+          setUserPhoto(photoUrl); // Ustawienie zdjęcia użytkownika
+        } catch (error) {
+          console.error('Error fetching user photo:', error);
+        }
+      };
+      fetchUserPhoto();
     }
   }, [selectedUser]);
 
@@ -75,6 +87,56 @@ const ChatPage = () => {
   const handleSelectUser = (user) => {
     setSelectedUser(user);
     setMessages([]);
+  };
+
+  const renderUserDetails = () => {
+    if (!selectedUser) return null;
+
+    const { role, socialGoals, strategies, projectExperience, budget, partners, grants, hobbies } = selectedUser;
+
+    return (
+      <Box>
+        {role === 'ngo' && (
+          <>
+            <Typography variant="h6" sx={{ marginBottom: 1, color: '#fff' }}>Social Goals</Typography>
+            <Typography variant="body2" sx={{ color: '#fff', marginBottom: 2 }}>{socialGoals || 'No social goals specified.'}</Typography>
+            <Divider sx={{ backgroundColor: '#fff' }} />
+            <Typography variant="h6" sx={{ marginTop: 2, marginBottom: 1, color: '#fff' }}>Strategies</Typography>
+            <Typography variant="body2" sx={{ color: '#fff', marginBottom: 2 }}>{strategies || 'No strategies specified.'}</Typography>
+            <Divider sx={{ backgroundColor: '#fff' }} />
+            <Typography variant="h6" sx={{ marginTop: 2, marginBottom: 1, color: '#fff' }}>Project Experience</Typography>
+            <Typography variant="body2" sx={{ color: '#fff' }}>{projectExperience || 'No project experience specified.'}</Typography>
+          </>
+        )}
+        {role === 'business' && (
+          <>
+            <Typography variant="h6" sx={{ marginBottom: 1, color: '#fff' }}>Social Goals</Typography>
+            <Typography variant="body2" sx={{ color: '#fff', marginBottom: 2 }}>{socialGoals || 'No social goals specified.'}</Typography>
+            <Divider sx={{ backgroundColor: '#fff' }} />
+            <Typography variant="h6" sx={{ marginTop: 2, marginBottom: 1, color: '#fff' }}>Strategies</Typography>
+            <Typography variant="body2" sx={{ color: '#fff', marginBottom: 2 }}>{strategies || 'No strategies specified.'}</Typography>
+            <Divider sx={{ backgroundColor: '#fff' }} />
+            <Typography variant="h6" sx={{ marginTop: 2, marginBottom: 1, color: '#fff' }}>Budget</Typography>
+            <Typography variant="body2" sx={{ color: '#fff', marginBottom: 2 }}>{budget ? `$${budget}` : 'No budget specified.'}</Typography>
+            <Divider sx={{ backgroundColor: '#fff' }} />
+            <Typography variant="h6" sx={{ marginTop: 2, marginBottom: 1, color: '#fff' }}>Partners</Typography>
+            <Typography variant="body2" sx={{ color: '#fff', marginBottom: 2 }}>{partners || 'No partners specified.'}</Typography>
+            <Divider sx={{ backgroundColor: '#fff' }} />
+            <Typography variant="h6" sx={{ marginTop: 2, marginBottom: 1, color: '#fff' }}>Grants</Typography>
+            <Typography variant="body2" sx={{ color: '#fff' }}>{grants || 'No grants specified.'}</Typography>
+          </>
+        )}
+        {role === 'volunteer' && (
+          <>
+            <Typography variant="h6" sx={{ marginBottom: 1, color: '#fff' }}>Description</Typography>
+            <Typography variant="body2" sx={{ color: '#fff', marginBottom: 2 }}>{selectedUser.description || 'No description provided.'}</Typography>
+            <Divider sx={{ backgroundColor: '#fff' }} />
+            <Typography variant="h6" sx={{ marginTop: 2, marginBottom: 1, color: '#fff' }}>Hobbies</Typography>
+            <Typography variant="body2" sx={{ color: '#fff' }}>{selectedUser.hobbies || 'No hobbies specified.'}</Typography>
+          </>
+        )}
+      </Box>
+    );
   };
 
   return (
@@ -135,16 +197,12 @@ const ChatPage = () => {
               flexDirection: 'column',
               alignItems: 'left',
               width: '60%',
-              // marginLeft: '12%',
               backgroundColor: 'transparent',
               height: '87vh',
             }}
           >
             {/* Messages list */}
             <Box sx={{ flex: 1, overflowY: 'auto', padding: 2, backgroundColor: 'transparent' }}>
-              {/* <Typography variant="h6" align="center" gutterBottom sx={{ color: '#fff' }}>
-                {selectedUser ? selectedUser.name : 'Select a contact'}
-              </Typography> */}
               {messages.length === 0 ? (
                 <Typography variant="body1" align="center" color="textSecondary" sx={{ color: '#fff' }}>
                   No messages.
@@ -227,12 +285,11 @@ const ChatPage = () => {
                 right: 0,
                 top: '64px',
                 height: 'calc(100vh - 64px)',
-                // justifyContent: 'center',
               }}
             >
               <Avatar
                 alt={selectedUser.name}
-                src={selectedUser.photoUrl || '/default-profile.png'}
+                src={userPhoto || '/default-profile.png'}
                 sx={{ width: 120, height: 120, marginBottom: 2 }}
               />
               <Typography variant="h6" sx={{ color: '#fff', marginBottom: 1 }}>
@@ -241,6 +298,8 @@ const ChatPage = () => {
               <Typography variant="body2" sx={{ color: '#fff', textAlign: 'center', opacity: 0.8 }}>
                 {selectedUser.description || 'This user has no description.'}
               </Typography>
+              <Divider sx={{ backgroundColor: '#fff', marginY: 2, width: '100%' }} />
+              {renderUserDetails()}
             </Box>
           )}
         </Box>
