@@ -18,6 +18,10 @@ public class BizUser extends User {
     @Column(name = "service")
     private Set<String> services = new HashSet<>();
 
+    public BizUser(UserDTO userDTO) {
+        super(userDTO);
+    }
+
     public void addService(BizService service) {
         services.add(service.name());
     }

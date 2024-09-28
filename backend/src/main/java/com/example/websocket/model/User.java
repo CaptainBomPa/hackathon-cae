@@ -13,14 +13,21 @@ import lombok.Data;
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    private String name;
-    private String email;
-    private String password;
-    private Role role;
+    protected long id;
+    protected String name;
+    protected String email;
+    protected String password;
+    protected Role role;
 //    private String description;
 //    private String location;
 //    private String contactPerson;
 //    private String contactPhone;
 //    private String contactEmail;
+
+    protected User(UserDTO userDTO) {
+        this.name = userDTO.getName();
+        this.email = userDTO.getEmail();
+        this.password = userDTO.getPassword();
+        this.role = userDTO.getRole();
+    }
 }

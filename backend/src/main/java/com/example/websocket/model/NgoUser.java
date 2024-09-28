@@ -19,6 +19,9 @@ public class NgoUser extends User {
     @Column(name = "service")
     private Set<String> services = new HashSet<>();
 
+    public NgoUser(UserDTO userDTO) {
+        super(userDTO);
+    }
 
     public void addService(NgoService service) {
         services.add(service.name());

@@ -11,5 +11,7 @@ import lombok.Setter;
 @DiscriminatorValue("VOLUNTEER")
 public class VolunteerUser extends User {
 
-
+    public VolunteerUser(UserDTO userDTO) {
+        super(userDTO);
+    }
 }
