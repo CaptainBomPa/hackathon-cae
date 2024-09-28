@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { Box, TextField, IconButton, List, ListItem, ListItemText } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import InputAdornment from '@mui/material/InputAdornment';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const StringListInput = ({ label, value, onChange }) => {
@@ -19,7 +21,7 @@ const StringListInput = ({ label, value, onChange }) => {
   };
 
   return (
-    <Box sx={{ marginBottom: 2 }}>
+    <Box sx={{ marginBottom: 0 }}>
       <TextField
         label={label}
         value={inputValue}
@@ -27,21 +29,22 @@ const StringListInput = ({ label, value, onChange }) => {
         fullWidth
         onKeyPress={(e) => e.key === 'Enter' && handleAddItem()}
         sx={{ 
-          marginBottom: 1, 
+          marginBottom: 0, 
           '& .MuiInputBase-root': {
             backgroundColor: '#DCDCDC', // Dopasowanie tła TextField
             borderRadius: '20px',
-          
           }
         }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={handleAddItem}>
+                <AddIcon />
+              </IconButton>
+            </InputAdornment>
+          )
+        }}
       />
-      <Button variant="contained" onClick={handleAddItem} fullWidth sx={{ 
-        marginBottom: 1,
-        borderRadius: '20px',
-        
-        }}>
-        Add
-      </Button>
       <List>
         <AnimatePresence>
           {value.map((item, index) => (

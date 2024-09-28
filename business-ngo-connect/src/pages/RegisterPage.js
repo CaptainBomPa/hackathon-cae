@@ -241,10 +241,10 @@ const RegisterPage = () => {
               />
 
               {/* Dodanie wyboru roli */}
-              <FormControl fullWidth sx={{ 
-                marginY: 2 ,
-                
-                }}>
+              <FormControl fullWidth sx={{
+                marginY: 2,
+
+              }}>
                 <InputLabel id="role-select-label">Role</InputLabel>
                 <Select
                   labelId="role-select-label"
@@ -298,9 +298,29 @@ const RegisterPage = () => {
 
               }}
             >
-              <Typography variant="h5" gutterBottom>
+              <Typography variant="h5" gutterBottom sx={{ marginBottom: 2 }}>
                 Additional Information
               </Typography>
+              <CustomTextField
+                label="Description"
+                name="description"
+                fullWidth
+                multiline
+                rows={4}
+                value={additionalData.description}
+                onChange={(e) => handleAdditionalDataChange("description", e.target.value)}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    backgroundColor: "#DCDCDC", // Dopasowanie tła TextField
+                    borderRadius: "20px",
+                    marginBottom: 4
+                  },
+                  "& .MuiInputLabel-root": {
+                    fontSize: "18px", // Zwiększenie rozmiaru etykiety
+                  },
+                }}
+              />
+
               {formik.values.role === "ngo" && (
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
@@ -427,11 +447,12 @@ const RegisterPage = () => {
                     "&:hover": { backgroundColor: "#5c5c5c" },
                     fontSize: "20px", // Zwiększenie rozmiaru czcionki przycisku
                     // padding: "100px 0", // Zwiększenie paddingu przycisku
-                    marginBottom: 12,
+                    // marginBottom: 12,
                     position: "sticky", // Sticky button
                     bottom: 0, // Sticky na dole
                     marginTop: 2, // Odstęp od reszty
                     zIndex: 10, // Zwiększenie z-index, aby nie było problemów z widocznością
+                    borderRadius: '20px'
                   }}
                 >
                   Submit
@@ -443,6 +464,8 @@ const RegisterPage = () => {
           <Box mt={3} textAlign="center">
             {" "}
             {/* Zwiększenie odstępu */}
+            {!showAdditionalForm && ( // Warunek ukrywania linku "Already have an account"
+          
             <Typography variant="body1" style={{ color: "#fff" }}>
               {" "}
               {/* Zwiększenie rozmiaru tekstu linku */}
@@ -459,6 +482,7 @@ const RegisterPage = () => {
               </Link>{" "}
               to access your account.
             </Typography>
+            )}
           </Box>
 
           <Snackbar
