@@ -1,10 +1,8 @@
 package com.example.websocket.init;
 
-import com.example.websocket.model.BizUser;
-import com.example.websocket.model.NgoUser;
-import com.example.websocket.model.Role;
-import com.example.websocket.model.VolunteerUser;
+import com.example.websocket.model.*;
 import com.example.websocket.model.enums.CompanySize;
+import com.example.websocket.repository.SwipeRepository;
 import com.example.websocket.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -16,6 +14,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public final class DatabaseInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
+    private final SwipeRepository swipeRepository;
 
     private String[] ngoStrategies = new String[]{"Increasing public awareness of environmental issues",
             "Supporting local communities through education and training",
@@ -72,6 +71,10 @@ public final class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        generateUsers();
+    }
+
+    private void generateUsers() {
         for (int i = 0; i < 3; i++) {
             BizUser biz = new BizUser();
             biz.setName("Biz User" + i);
@@ -107,6 +110,28 @@ public final class DatabaseInitializer implements CommandLineRunner {
             userRepository.save(biz);
             userRepository.save(ngo);
             userRepository.save(vol);
+
+            //match generation
+            if (i == 1) {
+                generateBizNgoMatch(biz, ngo);
+                generateNgoVolunteerMatch(ngo, vol);
+            }
         }
+    }
+
+    private void generateBizNgoMatch(BizUser biz, NgoUser ngo) {
+        Swipe swipeBizNgo = new Swipe();
+        swipeBizNgo.setUserId(biz.getId());
+        swipeBizNgo.setPartnerId(ngo.getId());
+        swipeBizNgo.setSwipeStatus(true);
+        swipeRepository.save(swipeBizNgo);
+    }
+
+    private void generateNgoVolunteerMatch(NgoUser ngo, VolunteerUser vol) {
+        Swipe swipeNgoVol = new Swipe();
+        swipeNgoVol.setUserId(ngo.getId());
+        swipeNgoVol.setPartnerId(vol.getId());
+        swipeNgoVol.setSwipeStatus(true);
+        swipeRepository.save(swipeNgoVol);
     }
 }
