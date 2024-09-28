@@ -90,6 +90,30 @@
       "content": "Słuchaj no, możemy już dziś, wszystko dzięki tej wspaniałem platformie!",
       "timestamp": "2024-09-21T11:54:01.778Z",
       "isRead": false
+    },
+    {
+      "id": 7,
+      "relationId": 2,
+      "message": "new",
+      "timestamp": "2024-09-28T17:44:48.733Z",
+      "senderId": 4,
+      "receiverId": 2
+    },
+    {
+      "id": 8,
+      "relationId": 2,
+      "message": "new nwe nwe ",
+      "timestamp": "2024-09-28T17:44:54.315Z",
+      "senderId": 4,
+      "receiverId": 2
+    },
+    {
+      "id": 9,
+      "relationId": 2,
+      "message": "hdyeduiwehdhde",
+      "timestamp": "2024-09-28T17:45:03.694Z",
+      "senderId": 4,
+      "receiverId": 2
     }
   ],
   "match": [

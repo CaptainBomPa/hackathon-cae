@@ -103,9 +103,9 @@ const DashboardLayout = ({ children }) => {
           </IconButton>
           <Box
             component="img"
-            src="/logo.png"
+            src="/logo-no.png"
             alt="Logo"
-            sx={{ height: '80px', margin: '0 auto' }} // Poprawiony rozmiar logo
+            sx={{ height: '60px', margin: '0 auto' }} // Poprawiony rozmiar logo
           />
           <IconButton
             color="inherit"
@@ -165,7 +165,7 @@ const DashboardLayout = ({ children }) => {
           marginTop: 8, // Ustalamy margines, żeby nie zachodziło na AppBar
         }}
       >
-        <Toolbar />
+       
         {children}
       </Box>
     </Box>

@@ -75,7 +75,7 @@ const MainPage = () => {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'flex-start',
-            height: '80vh',
+            height: '87vh',
             padding: 0,
           }}
         >
@@ -130,6 +130,7 @@ const MainPage = () => {
               alignItems: 'center',
               width: '80%',
               marginLeft: '20%', // Przesunięcie zawartości głównej w prawo, aby nie była zasłonięta przez lewy panel
+              marginTop: '5%'
             }}
           >
             {/* Karta Biznesowa */}

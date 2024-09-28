@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, List, ListItem, ListItemText, Paper, TextField, IconButton, Divider } from '@mui/material';
+import { Typography, Box, List, ListItem, ListItemText, Paper, TextField, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import DashboardLayout from '../components/DashboardLayout';
-import { getMatchedUsers, getMessages, sendMessage } from '../services/chatService'; // Zaktualizowane importy
+import { getMatchedUsers, getMessages, sendMessage } from '../services/chatService'; // Updated imports
 import { motion } from 'framer-motion'; // Import framer-motion
 
 const pageVariants = {
@@ -16,10 +16,9 @@ const ChatPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const loggedInUserId = 4; // Zalogowany użytkownik
+  const loggedInUserId = 4; // Logged in user
 
   useEffect(() => {
-    // Pobranie sparowanych użytkowników
     const fetchMatchedUsers = async () => {
       try {
         const usersData = await getMatchedUsers(loggedInUserId);
@@ -32,7 +31,6 @@ const ChatPage = () => {
   }, []);
 
   useEffect(() => {
-    // Pobranie wiadomości po wybraniu użytkownika
     if (selectedUser) {
       const fetchMessages = async () => {
         try {
@@ -49,11 +47,11 @@ const ChatPage = () => {
   const handleSendMessage = async () => {
     if (newMessage.trim() === '' || !selectedUser) return;
     const message = {
-      relationId: selectedUser.id, // Zakładamy, że `relationId` to ID użytkownika
+      relationId: selectedUser.id,
       senderId: loggedInUserId,
       receiverId: selectedUser.id,
       message: newMessage,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     try {
       await sendMessage(message);
@@ -77,39 +75,70 @@ const ChatPage = () => {
         animate="animate"
         exit="exit"
         transition={{ type: 'tween', duration: 0.3 }}
-        sx={{padding: 0, marginLeft: 0}}
+        sx={{padding: 0, marginLeft: 0, heigth:'100vh'}}
       >
-        <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)', backgroundColor: 'rgba(0, 0, 0, 0.3)', padding: 0, margin: 0 }}>
-          <Box sx={{ width: '250px', borderRight: '1px solid #ddd', overflowY: 'auto', height: '100%', padding: 0, margin: 0 }}>
-            <Typography variant="h6" align="center" gutterBottom sx={{ mt: 2, color: "#fff" }}>
-              Contacts
-            </Typography>
-            <List>
+        <Box >
+          {/* Contact list panel */}
+          <Box
+            sx={{
+              width: '12%',
+              overflowY: 'auto',
+              height: '100%',
+              backgroundColor: 'rgba(109, 109, 109, 0.4)', // Similar styling to MainPage
+              padding: 0,
+              marginTop: '64px',
+              position: 'fixed',
+              left: 0,
+              top: 0,
+            }}
+          >
+            <List sx={{ width: '100%' }}>
               {matchedUsers.map((user) => (
                 <React.Fragment key={user.id}>
                   <ListItem
                     button
                     onClick={() => handleSelectUser(user)}
                     selected={selectedUser && selectedUser.id === user.id}
-                    sx={{ padding: '10px 16px', color: "#fff" }}
+                    sx={{
+                      padding: '10px 16px',
+                      backgroundColor: selectedUser && selectedUser.id === user.id
+                        ? 'rgba(65, 140, 181, 0.6)'
+                        : 'rgba(109, 109, 109, 0.0)', // Background color when selected
+                      '&:hover': {
+                        backgroundColor: 'rgba(109, 109, 109, 0.6)', // Hover color
+                      },
+                      color: 'black',
+                      transition: 'background-color 0.3s ease', // Smooth background transition
+                      border: 'none', // Remove borders
+                    }}
                   >
                     <ListItemText primary={user.name} />
                   </ListItem>
-                  <Divider color="white" />
                 </React.Fragment>
               ))}
             </List>
           </Box>
 
           {/* Chat */}
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-            {/* Lista wiadomości */}
-            <Box sx={{ flex: 1, overflowY: 'auto', padding: 2 }}>
-              <Typography variant="h6" align="center" gutterBottom sx={{ color: "#fff" }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'left',
+              width: '50%',
+              marginLeft: '30%', // Przesunięcie zawartości głównej w prawo, aby nie była zasłonięta przez lewy panel
+              backgroundColor: 'transparent',
+              height: '87vh'
+              
+            }}
+          >
+            {/* Messages list */}
+            <Box sx={{ flex: 1, overflowY: 'auto', padding: 2, backgroundColor: 'transparent' }}>
+              <Typography variant="h6" align="center" gutterBottom sx={{ color: '#fff' }}>
                 {selectedUser ? selectedUser.name : 'Select a contact'}
               </Typography>
               {messages.length === 0 ? (
-                <Typography variant="body1" align="center" color="textSecondary" sx={{ color: "#fff" }}>
+                <Typography variant="body1" align="center" color="textSecondary" sx={{ color: '#fff' }}>
                   No messages.
                 </Typography>
               ) : (
@@ -125,10 +154,14 @@ const ChatPage = () => {
                     <Paper
                       sx={{
                         padding: '10px',
-                        backgroundColor: msg.senderId === loggedInUserId ? '#82ff82' : '#f1f1f1',
+                        backgroundColor: msg.senderId === loggedInUserId ? '#418CB5' : '#f1f1f1',
                         maxWidth: '70%',
                         wordBreak: 'break-word',
-                        borderRadius: '8px',
+                        // borderRadius: '20px',
+                        borderTopLeftRadius: '20px',
+                        borderTopRightRadius: '20px',
+                        borderBottomLeftRadius: msg.senderId === loggedInUserId ? '20px' : 0,
+                        borderBottomRightRadius: msg.senderId === loggedInUserId ? 0 : '20px'
                       }}
                     >
                       <Typography variant="body2" color="textSecondary">
@@ -143,9 +176,9 @@ const ChatPage = () => {
               )}
             </Box>
 
-            {/* Wysyłanie wiadomości */}
+            {/* Sending message */}
             {selectedUser && (
-              <Box sx={{ display: 'flex', alignItems: 'center', padding: 2, borderTop: '1px solid #ddd' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', padding: 2 }}>
                 <TextField
                   variant="outlined"
                   fullWidth
