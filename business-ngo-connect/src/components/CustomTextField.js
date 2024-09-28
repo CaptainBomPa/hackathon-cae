@@ -3,20 +3,20 @@ import { TextField, styled } from '@mui/material';
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   '& .MuiInputBase-root': {
-    backgroundColor: 'rgba(128, 128, 128, 0.4)',
+    backgroundColor: '#DCDCDC', // Ustaw tło na #DCDCDC
     borderRadius: theme.shape.borderRadius,
   },
   '& .MuiOutlinedInput-notchedOutline': {
-    borderColor: 'rgba(128, 128, 128, 0.3)',
+    borderColor: '#418CB5', // Kolor obramowania na #418CB5 (R65, G140, B181 w HEX)
   },
   '& .MuiInputBase-input': {
     color: theme.palette.text.primary,
   },
   '&:hover .MuiOutlinedInput-notchedOutline': {
-    borderColor: 'rgba(128, 128, 128, 0.5)',
+    borderColor: '#418CB5', // Zmieniony kolor podczas najechania
   },
   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-    borderColor: theme.palette.primary.main,
+    borderColor: '#418CB5', // Zmieniony kolor podczas fokusa
   },
 }));
 

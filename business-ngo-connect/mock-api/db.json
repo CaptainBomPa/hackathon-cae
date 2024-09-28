@@ -8,7 +8,9 @@
       "type": "business",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pellentesque tristique libero, et placerat eros sagittis sit amet. Aenean molestie mauris ex, vitae laoreet risus gravida non. Proin condimentum, dui id rhoncus mollis, dui mi sagittis tellus, ac luctus felis purus tincidunt purus. Fusce dapibus magna sapien, id luctus augue ullamcorper sed. Aliquam turpis dolor, venenatis tincidunt mattis id, porta nec libero. Proin sed ipsum at nisl mattis faucibus ac ut odio. In quis accumsan quam.",
       "categories": [
-        "Technologia", "Rozwój ekonomiczny", "Nauka i badania"
+        "Technologia",
+        "Rozwój ekonomiczny",
+        "Nauka i badania"
       ],
       "images": [
         "1726910482385-1.jpg",
@@ -23,11 +25,11 @@
       "type": "business",
       "description": "Fusce porta luctus erat ut sagittis. Nunc pulvinar mollis elit in luctus. Nullam non orci sodales sapien rutrum faucibus eget eget mauris. Sed et dolor et nunc eleifend convallis. Mauris consectetur porta nisi sed euismod. Sed pretium mollis ipsum, vel feugiat tellus mollis et. Nunc varius pulvinar arcu, ut euismod purus pulvinar in. Vestibulum non lacus et felis elementum volutpat eget ac neque. In imperdiet dignissim ex et tincidunt. Etiam mauris dolor, rutrum quis cursus a, condimentum in dolor.",
       "categories": [
-        "Kultura", 
-        "Turystyka", 
-        "Transport i logistyka", 
-        "Środowisko", 
-        "Energetyka odnawialna", 
+        "Kultura",
+        "Turystyka",
+        "Transport i logistyka",
+        "Środowisko",
+        "Energetyka odnawialna",
         "Urbanistyka i planowanie",
         "Pomoc humanitarna",
         "Zwalczanie ubóstwa"
@@ -45,7 +47,9 @@
       "type": "business",
       "description": "Praesent nulla metus, vehicula et diam sed, placerat viverra turpis. Morbi ut laoreet nisi, vel lobortis lacus. Suspendisse maximus tincidunt ipsum a pharetra. Etiam laoreet neque eu nunc bibendum, eget interdum justo vulputate. Morbi egestas efficitur magna, quis hendrerit justo tempus ut. Etiam quis arcu dui. Praesent suscipit metus ac condimentum maximus. Integer eros velit, rhoncus ut lorem quis, auctor sollicitudin metus. Vestibulum et dapibus justo, a commodo nisi.",
       "categories": [
-        "Zdrowie", "Edukacja", "Nauka i badania"
+        "Zdrowie",
+        "Edukacja",
+        "Nauka i badania"
       ],
       "images": [
         "1726910657279-7.jpg",
@@ -60,11 +64,86 @@
       "type": "ngo",
       "description": "Pellentesque rhoncus tincidunt risus, ac gravida dui bibendum nec. Pellentesque eu suscipit odio. Fusce et nisl sollicitudin, pellentesque massa bibendum, pulvinar risus. Nunc porttitor tincidunt justo, non tristique enim semper et. Quisque finibus hendrerit lectus vel accumsan. Suspendisse a dui sit amet justo malesuada fringilla et sed sem. Fusce elit magna, vulputate in enim nec, cursus consequat ante. Phasellus pellentesque quam cursus, lacinia velit vitae, iaculis leo. Sed pellentesque nisi a gravida porta. Mauris commodo tellus ut lectus viverra dapibus. Vivamus consequat lorem sed nunc accumsan, eu vestibulum tellus pretium. Cras ac justo blandit, volutpat nunc in, convallis eros. In ut eros augue.",
       "categories": [
-        "Edukacja", "'Prawa człowieka", "Innowacje społeczne"
+        "Edukacja",
+        "'Prawa człowieka",
+        "Innowacje społeczne"
       ],
       "images": [
         "1726910737005-6.png"
       ]
+    },
+    {
+      "id": 5,
+      "name": "adsadasd",
+      "email": "dasda@bgvdrg",
+      "password": "Test!123",
+      "type": "ngo",
+      "images": []
+    },
+    {
+      "id": 6,
+      "name": "imie",
+      "email": "imie@test",
+      "password": "Test!123",
+      "type": "ngo",
+      "images": []
+    },
+    {
+      "id": 7,
+      "name": "test",
+      "email": "test@tes",
+      "password": "Test!123",
+      "type": "ngo",
+      "images": []
+    },
+    {
+      "id": 8,
+      "name": "test",
+      "email": "test@tes12",
+      "password": "Test!123",
+      "type": "ngo",
+      "images": []
+    },
+    {
+      "id": 9,
+      "name": "test",
+      "email": "xdxd@xd",
+      "password": "Test!123",
+      "type": "ngo",
+      "images": []
+    },
+    {
+      "id": 10,
+      "name": "test",
+      "email": "test@testestsets",
+      "password": "Test!123",
+      "type": "business",
+      "images": []
+    },
+    {
+      "id": 11,
+      "name": "test",
+      "email": "test@tgerdfgerhj",
+      "password": "tEST!123",
+      "type": "ngo",
+      "images": []
+    },
+    {
+      "id": 12,
+      "name": "testes",
+      "email": "tes@gterghre",
+      "password": "Test!123",
+      "type": "ngo",
+      "images": []
+    },
+    {
+      "id": 13,
+      "name": "test",
+      "email": "test@gdrgehoriuehjr",
+      "password": "Test!123",
+      "type": "business",
+      "description": "",
+      "images": []
     }
   ],
   "relations": [
