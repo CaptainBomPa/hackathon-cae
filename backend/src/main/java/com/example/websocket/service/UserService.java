@@ -62,4 +62,13 @@ public class UserService {
             throw new RuntimeException("User not found with ID: " + userId);
         }
     }
+    public byte[] getPhoto(Long userId) {
+        Optional<User> existingUserOpt = userRepository.findById(userId);
+
+        if (existingUserOpt.isPresent()) {
+            return existingUserOpt.get().getPhoto().getPhoto();
+        } else {
+            throw new RuntimeException("User not found with ID: " + userId);
+        }
+    }
 }
