@@ -3,7 +3,7 @@ from dataclasses import asdict
 from flask import Flask, request, jsonify
 
 from engine import RecommendationEngine
-from database import db
+from src.database import Database
 
 app = Flask(__name__)
 engine = RecommendationEngine()
@@ -45,4 +45,9 @@ def get_ngos_for_volunteer():
     return jsonify(recommended_ngos)
 
 if __name__ == '__main__':
+    db = Database(database="root",
+                  host="localhost",
+                  user="root",
+                  password="secret",
+                  port="5433")
     app.run(debug=True)

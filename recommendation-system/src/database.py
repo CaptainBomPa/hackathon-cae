@@ -46,9 +46,3 @@ class Database:
         cursor.execute("SELECT * FROM user WHERE user_type = 'VOLUNTEER' LIMIT 50")
         volunteers_db = cursor.fetchall()
         return [Volunteer(volunteer[1], volunteer[4], volunteer[3], volunteer[7], volunteer[2], volunteer[17], volunteer[15]) for volunteer in volunteers_db]
-
-db = Database(database="root",
-              host="localhost",
-              user="root",
-              password="secret",
-              port="5433")
