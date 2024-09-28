@@ -2,13 +2,9 @@ package com.example.websocket.model;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Entity
 @DiscriminatorValue("VOLUNTEER")
 @NoArgsConstructor

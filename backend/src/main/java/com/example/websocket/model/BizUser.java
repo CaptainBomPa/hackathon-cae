@@ -9,8 +9,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+@Data
 @Entity
 @DiscriminatorValue("BIZ")
 @NoArgsConstructor
@@ -26,6 +25,4 @@ public class BizUser extends User {
     public BizUser(UserDTO userDTO) {
         super(userDTO);
     }
-
-
 }
