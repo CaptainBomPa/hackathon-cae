@@ -15,13 +15,15 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public User register(@RequestBody UserDTO userDTO) {
-        return switch (userDTO.getRole()) {
+    public UserDTO register(@RequestBody UserDTO userDTO) {
+        User user = switch (userDTO.getRole()) {
             case BIZ -> userService.register(new BizUser(userDTO));
             case NGO -> userService.register(new NgoUser(userDTO));
             case VOLUNTEER -> userService.register(new VolunteerUser(userDTO));
             default -> throw new IllegalArgumentException("User role doesn't match any expected value.");
         };
+        userDTO.setId(user.getId());
+        return userDTO;
     }
 
     @PostMapping("/login")
