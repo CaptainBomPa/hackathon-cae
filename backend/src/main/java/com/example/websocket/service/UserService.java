@@ -66,7 +66,11 @@ public class UserService {
         Optional<User> existingUserOpt = userRepository.findById(userId);
 
         if (existingUserOpt.isPresent()) {
-            return existingUserOpt.get().getPhoto().getPhoto();
+            var photo =  existingUserOpt.get().getPhoto();
+            if (photo != null) {
+                return photo.getPhoto();
+            }
+            return null;
         } else {
             throw new RuntimeException("User not found with ID: " + userId);
         }

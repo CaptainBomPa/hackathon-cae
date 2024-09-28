@@ -3,6 +3,7 @@ package com.example.websocket.controller;
 import com.example.websocket.model.*;
 import com.example.websocket.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,8 @@ import java.util.List;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
+    private ClassPathResource defaultProfileImage = new ClassPathResource("default-profile-image.png");
+
     private final UserService userService;
 
     @PostMapping("/register")
@@ -53,6 +56,9 @@ public class UserController {
     @GetMapping(value = "/photo/{id}")
     public ResponseEntity<byte[]> getPhoto(@PathVariable Long id) throws IOException {
         byte[] photo = userService.getPhoto(id);
+        if (photo == null) {
+            photo = defaultProfileImage.getContentAsByteArray();
+        }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(detectContentType(photo)));
         return new ResponseEntity<>(photo, headers, HttpStatus.OK);
