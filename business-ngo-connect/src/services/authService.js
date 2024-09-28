@@ -6,26 +6,26 @@ import API_BASE_URL from './api';
 // Funkcja logowania
 export const login = async (email, password) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/login`, {
+    const response = await axios.post(`${API_BASE_URL}/user/login`, {
       email,
       password,
     });
-    return response.data; // Zwracamy dane użytkownika w przypadku sukcesu
+    if (response.status === 200) {
+      localStorage.setItem('user', JSON.stringify(response.data));
+    } else {
+      throw new Error('An unexpected error occurred');
+    }
   } catch (error) {
     throw error.response ? error.response.data : new Error('An unexpected error occurred');
   }
 };
 
-// Funkcja rejestracji (możesz dodać ją później)
-export const register = async (formData) => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/register`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return response.data;
-    } catch (error) {
-      throw error.response ? error.response.data : new Error('An unexpected error occurred');
-    }
-  };
+// Funkcja rejestracji
+export const register = async (userData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/user/register`, userData);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('An unexpected error occurred');
+  }
+};

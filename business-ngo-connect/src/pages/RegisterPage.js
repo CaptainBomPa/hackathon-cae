@@ -54,6 +54,8 @@ const RegisterPage = () => {
     grants: [],
     description: "",
   });
+  const [userId, setUserId] = useState(null); // Zapisane ID zarejestrowanego użytkownika
+
   const navigate = useNavigate();
 
   // Funkcja obsługująca walidację formik
@@ -66,42 +68,33 @@ const RegisterPage = () => {
       role: "", // Domyślna wartość dla roli
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      // Drugi etap rejestracji - dodanie dodatkowych danych
-      handleSubmitAdditionalForm(values);
+    onSubmit: async (values) => {
+      try {
+        // Przesłanie podstawowych danych rejestracyjnych
+        const userData = {
+          name: values.name,
+          email: values.email,
+          password: values.password,
+          role: values.role.toUpperCase(),
+        };
+        console.log(userData);
+        const registeredUser = await register(userData);
+
+        // Zapisanie zwróconego ID użytkownika
+        setUserId(registeredUser.id);
+
+        // Przejście do dodatkowego formularza
+        setShowAdditionalForm(true);
+      } catch (error) {
+        setAlertMessage(error.message || "Registration failed");
+        setShowAlert(true);
+      }
     },
   });
 
   // Obsługa zamknięcia alertu
   const handleCloseAlert = () => {
     setShowAlert(false);
-  };
-
-  // Funkcja do obsługi przesyłania danych z dodatkowego formularza
-  const handleSubmitAdditionalForm = async (values) => {
-    try {
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("email", values.email);
-      formData.append("password", values.password);
-      formData.append("type", values.role);
-
-      // Dodanie dodatkowych danych do FormData
-      formData.append("strategies", JSON.stringify(additionalData.strategies));
-      formData.append("projects", JSON.stringify(additionalData.projects));
-      formData.append("goals", JSON.stringify(additionalData.goals));
-      formData.append("budget", additionalData.budget);
-      formData.append("partners", JSON.stringify(additionalData.partners));
-      formData.append("grants", JSON.stringify(additionalData.grants));
-      formData.append("description", additionalData.description);
-
-      // Rejestracja użytkownika
-      await register(formData);
-      navigate("/main"); // Przekierowanie na stronę główną po wypełnieniu dodatkowych danych
-    } catch (error) {
-      setAlertMessage(error.message || "Registration failed");
-      setShowAlert(true);
-    }
   };
 
   // Funkcja do ustawiania wartości dla dodatkowych pól
@@ -136,7 +129,6 @@ const RegisterPage = () => {
             maxWidth: "600px", // Zwiększenie maksymalnej szerokości formularza
             height: showAdditionalForm ? "90vh" : "90vh", // Większa wysokość dla dodatkowego formularza
             overflow: "auto", // Ukrycie scrolla w sekcji
-
           }}
         >
           {/* Logo */}
@@ -241,10 +233,12 @@ const RegisterPage = () => {
               />
 
               {/* Dodanie wyboru roli */}
-              <FormControl fullWidth sx={{
-                marginY: 2,
-
-              }}>
+              <FormControl
+                fullWidth
+                sx={{
+                  marginY: 2,
+                }}
+              >
                 <InputLabel id="role-select-label">Role</InputLabel>
                 <Select
                   labelId="role-select-label"
@@ -256,7 +250,7 @@ const RegisterPage = () => {
                   }}
                   sx={{
                     backgroundColor: "#DCDCDC", // Ustawienie tła na #DCDCDC
-                    borderRadius: '20px'
+                    borderRadius: "20px",
                   }}
                 >
                   <MenuItem value="">
@@ -282,7 +276,7 @@ const RegisterPage = () => {
                     "&:hover": { backgroundColor: "#5c5c5c" },
                     fontSize: "20px", // Zwiększenie rozmiaru czcionki przycisku
                     // padding: "12px 0", // Zwiększenie paddingu przycisku
-                    borderRadius: '20px'
+                    borderRadius: "20px",
                   }}
                 >
                   Next
@@ -295,7 +289,6 @@ const RegisterPage = () => {
               sx={{
                 height: "70vh", // Stała wysokość sekcji z dodatkowymi polami
                 overflowY: "auto", // Scroll w pionie
-
               }}
             >
               <Typography variant="h5" gutterBottom sx={{ marginBottom: 2 }}>
@@ -308,12 +301,14 @@ const RegisterPage = () => {
                 multiline
                 rows={4}
                 value={additionalData.description}
-                onChange={(e) => handleAdditionalDataChange("description", e.target.value)}
+                onChange={(e) =>
+                  handleAdditionalDataChange("description", e.target.value)
+                }
                 sx={{
                   "& .MuiInputBase-root": {
                     backgroundColor: "#DCDCDC", // Dopasowanie tła TextField
                     borderRadius: "20px",
-                    marginBottom: 4
+                    marginBottom: 4,
                   },
                   "& .MuiInputLabel-root": {
                     fontSize: "18px", // Zwiększenie rozmiaru etykiety
@@ -452,7 +447,7 @@ const RegisterPage = () => {
                     bottom: 0, // Sticky na dole
                     marginTop: 2, // Odstęp od reszty
                     zIndex: 10, // Zwiększenie z-index, aby nie było problemów z widocznością
-                    borderRadius: '20px'
+                    borderRadius: "20px",
                   }}
                 >
                   Submit
@@ -465,23 +460,22 @@ const RegisterPage = () => {
             {" "}
             {/* Zwiększenie odstępu */}
             {!showAdditionalForm && ( // Warunek ukrywania linku "Already have an account"
-          
-            <Typography variant="body1" style={{ color: "#fff" }}>
-              {" "}
-              {/* Zwiększenie rozmiaru tekstu linku */}
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                style={{
-                  color: "#fff",
-                  textDecoration: "underline",
-                  cursor: "pointer",
-                }}
-              >
-                Log in here
-              </Link>{" "}
-              to access your account.
-            </Typography>
+              <Typography variant="body1" style={{ color: "#fff" }}>
+                {" "}
+                {/* Zwiększenie rozmiaru tekstu linku */}
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  style={{
+                    color: "#fff",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                >
+                  Log in here
+                </Link>{" "}
+                to access your account.
+              </Typography>
             )}
           </Box>
 
