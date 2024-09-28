@@ -1,9 +1,7 @@
 package com.example.websocket.model;
 
-import com.impostorzy.model.enums.BizService;
-import com.impostorzy.model.enums.NgoService;
+import com.example.websocket.model.enums.BizService;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

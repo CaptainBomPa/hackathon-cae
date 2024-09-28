@@ -1,6 +1,7 @@
 package com.example.websocket.model;
 
-import com.impostorzy.model.enums.NgoService;
+
+import com.example.websocket.model.enums.NgoService;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
