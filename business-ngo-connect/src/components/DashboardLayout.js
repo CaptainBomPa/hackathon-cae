@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   AppBar,
@@ -20,6 +20,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import ChatIcon from '@mui/icons-material/Chat';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { getUserPhoto } from '../services/photoService'; // Import funkcji do pobierania zdjęcia
+import { getUser } from '../services/userService'; // Import funkcji do pobierania danych użytkownika
 
 const drawerWidth = 240;
 
@@ -27,6 +29,26 @@ const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
+  const [userPhoto, setUserPhoto] = useState(''); // Stan do przechowywania URL zdjęcia użytkownika
+  const [userName, setUserName] = useState(''); // Stan do przechowywania imienia użytkownika
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        setUserName(user.name); // Ustawienie imienia użytkownika
+
+        try {
+          const photoUrl = await getUserPhoto(user.id); // Pobranie zdjęcia użytkownika
+          setUserPhoto(photoUrl); // Ustawienie URL zdjęcia użytkownika
+        } catch (error) {
+          console.error('Error fetching user photo:', error);
+        }
+      }
+    };
+    fetchUserData();
+  }, []); // Wykonaj po zamontowaniu komponentu
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -42,7 +64,16 @@ const DashboardLayout = ({ children }) => {
 
   const handleNavigate = (path) => {
     handleUserMenuClose();
-    navigate(path);
+    if (path === '/login') {
+      handleLogout(); // Wywołanie funkcji wylogowania
+    } else {
+      navigate(path);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user'); // Usunięcie danych użytkownika z localStorage
+    navigate('/login'); // Przekierowanie na stronę logowania
   };
 
   const menuItems = [
@@ -52,7 +83,7 @@ const DashboardLayout = ({ children }) => {
 
   const userMenuItems = [
     { text: 'Account Settings', icon: <SettingsIcon />, path: '/settings' },
-    { text: 'Log Out', icon: <ExitToAppIcon />, path: '/login' },
+    { text: 'Log Out', icon: <ExitToAppIcon />, path: '/login' }, // Akcja wylogowania
   ];
 
   const drawer = (
@@ -112,7 +143,8 @@ const DashboardLayout = ({ children }) => {
             onClick={handleUserMenuOpen}
             sx={{ color: '#000' }}
           >
-            <Avatar />
+            {/* Wyświetlanie awatara użytkownika */}
+            <Avatar src={userPhoto} alt={userName} />
           </IconButton>
           <Menu
             anchorEl={userMenuAnchorEl}
@@ -165,7 +197,6 @@ const DashboardLayout = ({ children }) => {
           marginTop: 8, // Ustalamy margines, żeby nie zachodziło na AppBar
         }}
       >
-       
         {children}
       </Box>
     </Box>

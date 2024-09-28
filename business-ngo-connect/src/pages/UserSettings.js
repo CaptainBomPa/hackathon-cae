@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, Button, TextField, Grid, Paper, Alert, Snackbar, Avatar, IconButton } from '@mui/material';
 import DashboardLayout from '../components/DashboardLayout';
-import { updateProfile, updatePassword, getUser, uploadPhoto } from '../services/userService';
+import { updateProfile, updatePassword, getUser } from '../services/userService';
+import { getUserPhoto, updateUserPhoto } from '../services/photoService'; // Import funkcji do obsługi zdjęć
 import { motion } from 'framer-motion'; // Import framer-motion
 import PhotoCamera from '@mui/icons-material/PhotoCamera'; // Ikona do przesyłania zdjęcia
 
@@ -28,18 +29,28 @@ const UserSettingsPage = () => {
 
   // Przy pobraniu danych z localStorage zakładamy, że klucz 'user' przechowuje informacje o zalogowanym użytkowniku
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      setUserData({
-        ...userData,
-        name: user.name || '',
-        email: user.email || '',
-        photoUrl: user.photoUrl || '', // Jeśli jest przechowywany URL zdjęcia
-      });
-      setLoggedInUserId(user.id); // Ustawienie ID użytkownika z localStorage
-      console.log(user)
-    }
+    const fetchUserData = async () => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        setLoggedInUserId(user.id); // Ustawienie ID użytkownika z localStorage
+        
+        // Pobieranie danych użytkownika
+        setUserData({
+          ...userData,
+          name: user.name || '',
+          email: user.email || '',
+        });
+
+        try {
+          const photoUrl = await getUserPhoto(user.id); // Pobieranie zdjęcia użytkownika
+          setUserData((prevData) => ({ ...prevData, photoUrl })); // Aktualizacja URL zdjęcia
+        } catch (error) {
+          console.error('Error fetching user photo:', error);
+        }
+      }
+    };
+    fetchUserData();
   }, []); // Pusty array dependencies oznacza, że useEffect wykona się tylko raz po montażu komponentu
 
   const handleProfileUpdate = async () => {
@@ -84,14 +95,16 @@ const UserSettingsPage = () => {
   const handlePhotoUpload = async () => {
     if (!loggedInUserId || !selectedPhoto) return; // Jeśli brak ID użytkownika lub zdjęcia, nie wykonujemy operacji
 
-    const formData = new FormData();
-    formData.append('photo', selectedPhoto);
-
     try {
-      const updatedUser = await uploadPhoto(loggedInUserId, formData);
+      const updatedUser = await updateUserPhoto(loggedInUserId, selectedPhoto);
       setUserData(updatedUser); // Aktualizacja danych użytkownika z nowym zdjęciem
       setAlertMessage('Profile photo updated successfully.');
       setShowAlert(true);
+      setSelectedPhoto(null); // Zresetowanie wybranego zdjęcia
+
+      // Pobranie nowego zdjęcia po aktualizacji
+      const photoUrl = await getUserPhoto(loggedInUserId);
+      setUserData((prevData) => ({ ...prevData, photoUrl }));
     } catch (error) {
       setAlertMessage('Error uploading photo.');
       setShowAlert(true);
@@ -113,7 +126,7 @@ const UserSettingsPage = () => {
             <Grid item xs={12} md={6}>
               <Paper sx={{ padding: 2 }}>
                 <Typography variant="h6" gutterBottom>
-                  User Information
+                  Update User Information
                 </Typography>
                 <TextField
                   label="Name"
@@ -129,21 +142,6 @@ const UserSettingsPage = () => {
                   onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                   sx={{ marginBottom: 2 }}
                 />
-                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                  <Avatar src={userData.photoUrl} sx={{ width: 80, height: 80, marginRight: 2 }} />
-                  <IconButton
-                    color="primary"
-                    component="label"
-                    sx={{ backgroundColor: '#82ff82', '&:hover': { backgroundColor: '#70e270' } }}
-                  >
-                    <PhotoCamera />
-                    <input
-                      type="file"
-                      hidden
-                      onChange={(e) => setSelectedPhoto(e.target.files[0])}
-                    />
-                  </IconButton>
-                </Box>
                 <Button
                   variant="contained"
                   color="primary"
@@ -153,17 +151,6 @@ const UserSettingsPage = () => {
                 >
                   Update Profile
                 </Button>
-                {selectedPhoto && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handlePhotoUpload}
-                    sx={{ marginTop: 2, backgroundColor: '#418cb5', '&:hover': { backgroundColor: '#3179a3' } }}
-                    fullWidth
-                  >
-                    Upload Photo
-                  </Button>
-                )}
               </Paper>
             </Grid>
 
@@ -205,6 +192,40 @@ const UserSettingsPage = () => {
                   fullWidth
                 >
                   Change Password
+                </Button>
+              </Paper>
+            </Grid>
+
+            {/* Dodatkowy panel: Aktualizacja zdjęcia profilowego */}
+            <Grid item xs={12}>
+              <Paper sx={{ padding: 2 }}>
+                <Typography variant="h6" gutterBottom>
+                  Update Profile Photo
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                  <Avatar src={userData.photoUrl} sx={{ width: 120, height: 120, marginRight: 2 }} />
+                  <IconButton
+                    color="primary"
+                    component="label"
+                    sx={{ backgroundColor: '#82ff82', '&:hover': { backgroundColor: '#70e270' } }}
+                  >
+                    <PhotoCamera />
+                    <input
+                      type="file"
+                      hidden
+                      onChange={(e) => setSelectedPhoto(e.target.files[0])}
+                    />
+                  </IconButton>
+                </Box>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handlePhotoUpload}
+                  sx={{ marginTop: 2, backgroundColor: '#418cb5', '&:hover': { backgroundColor: '#3179a3' } }}
+                  fullWidth
+                  disabled={!selectedPhoto} // Disable button if no photo selected
+                >
+                  Upload Photo
                 </Button>
               </Paper>
             </Grid>
