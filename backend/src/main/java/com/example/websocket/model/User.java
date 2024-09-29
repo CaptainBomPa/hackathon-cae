@@ -21,7 +21,7 @@ public abstract class User {
     private String password;
     private Role role;
     private String socialGoals;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "photo_id", referencedColumnName = "id")
     private Photo photo;
     private String description;

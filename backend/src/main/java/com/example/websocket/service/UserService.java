@@ -87,4 +87,31 @@ public class UserService {
         }
         return userRepository.save(savedUser);
     }
+
+    public List<User> getNgos() {
+        List<User> users = userRepository.findAll()
+                .stream()
+                .filter(user -> user.getRole() == Role.NGO)
+                .toList();
+        users.forEach(user -> user.setPhoto(null));
+        return users;
+    }
+
+    public List<User> getCompanies() {
+        List<User> users = userRepository.findAll()
+                .stream()
+                .filter(user -> user.getRole() == Role.BUSINESS)
+                .toList();
+        users.forEach(user -> user.setPhoto(null));
+        return users;
+    }
+
+    public List<User> getVolunteers() {
+        List<User> users = userRepository.findAll()
+                .stream()
+                .filter(user -> user.getRole() == Role.VOLUNTEER)
+                .toList();
+        users.forEach(user -> user.setPhoto(null));
+        return users;
+    }
 }

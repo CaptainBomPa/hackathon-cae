@@ -194,6 +194,21 @@ public final class DatabaseInitializer implements CommandLineRunner {
         });
     }
 
+    private void setPhotoToUsersJpeg(List<User> userList, String imageNamePrefix) {
+        IntStream.range(0, userList.size()).forEach(i -> {
+            ClassPathResource defaultProfileImage = new ClassPathResource(imageNamePrefix + (i + 1) + ".jpg");
+            Photo photo = new Photo();
+            User volunteer = userList.get(i);
+            try {
+                photo.setPhoto(defaultProfileImage.getContentAsByteArray());
+                volunteer.setPhoto(photo);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            userRepository.save(volunteer);
+        });
+    }
+
     private void createBizUsers() {
         // Business users supporting environmental NGOs
         userRepository.save(createBizUser("GreenTech Solutions",
@@ -408,6 +423,8 @@ public final class DatabaseInitializer implements CommandLineRunner {
                 .filter(VolunteerUser.class::isInstance)
                 .map(VolunteerUser.class::cast)
                 .toList());
+
+        setPhotoToUsersJpeg(volunteerUsers.stream().map(User.class::cast).toList(), "v");
 
     }
 

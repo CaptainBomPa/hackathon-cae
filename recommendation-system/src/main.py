@@ -19,7 +19,6 @@ def get_companies_for_ngo():
     recommended_companies = engine.get_companies_for_ngo(ngo, companies)
     recommended_companies = [asdict(company) for company in recommended_companies]
     response = jsonify(recommended_companies)
-    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 @app.route('/recommendations/ngo/volunteers')
@@ -31,7 +30,6 @@ def get_companies_for_volunteer():
     recommended_volunteers = engine.get_volunteers_for_ngo(ngo, volunteers)
     recommended_volunteers = [asdict(volunteer) for volunteer in recommended_volunteers]
     response = jsonify(recommended_volunteers)
-    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 @app.route('/recommendations/company')
@@ -43,7 +41,6 @@ def get_ngos_for_company():
     recommended_ngos = engine.get_ngos_for_company(company, ngos)
     recommended_ngos = [asdict(ngo) for ngo in recommended_ngos]
     response = jsonify(recommended_ngos)
-    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 @app.route('/recommendations/volunteer')
@@ -55,11 +52,10 @@ def get_ngos_for_volunteer():
     recommended_ngos = engine.get_ngos_for_volunteer(volunteer, ngos)
     recommended_ngos = [asdict(ngo) for ngo in recommended_ngos]
     response = jsonify(recommended_ngos)
-    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 if __name__ == '__main__':
     DATABASE_URL = os.getenv('DATABASE_URL')
     db = Database(DATABASE_URL)
-    CORS(app)
+    CORS(app, supports_credentials=True, resources={r"/": {"origins": "", "methods": ["GET", "POST"]}})
     app.run(debug=True, host="0.0.0.0")
