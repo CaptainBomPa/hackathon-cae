@@ -87,4 +87,21 @@ public class UserController {
         return contentType != null ? contentType : MediaType.APPLICATION_OCTET_STREAM_VALUE;
     }
 
+    @GetMapping(value = "/ngos")
+    public ResponseEntity<List<User>> getNgos() throws IOException {
+        List<User> ngoUsers = userService.getNgos();
+        return new ResponseEntity<>(ngoUsers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/companies")
+    public ResponseEntity<List<User>> getCompanies() throws IOException {
+        List<User> ngoUsers = userService.getCompanies();
+        return new ResponseEntity<>(ngoUsers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/volunteers")
+    public ResponseEntity<List<User>> getVolunteers() throws IOException {
+        List<User> ngoUsers = userService.getVolunteers();
+        return new ResponseEntity<>(ngoUsers, HttpStatus.OK);
+    }
 }
