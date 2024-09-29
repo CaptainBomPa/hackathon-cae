@@ -66,6 +66,14 @@ def get_ngos_for_volunteer():
     response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-Requested-With"
     return response
 
+@app.before_request
+def before_request():
+    headers = {'Access-Control-Allow-Origin': '*',
+               'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+               'Access-Control-Allow-Headers': 'Content-Type'}
+    if request.method.lower() == 'options':
+        return jsonify(headers), 200
+
 if __name__ == '__main__':
     DATABASE_URL = os.getenv('DATABASE_URL')
     db = Database(DATABASE_URL)
