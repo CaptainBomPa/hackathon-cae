@@ -9,7 +9,7 @@ class Database:
 
     def get_ngo_by_id(self, ngo_id):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE id = %s", ngo_id)
+        cursor.execute("SELECT * FROM users WHERE id = %s", (ngo_id,))
         ngo = cursor.fetchone()
         col_names = [desc[0] for desc in cursor.description]
         ngo_dict = dict(zip(col_names, [(val if val is not None else "") for val in ngo]))
@@ -27,7 +27,7 @@ class Database:
 
     def get_company_by_id(self, company_id):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE id = %s", company_id)
+        cursor.execute("SELECT * FROM users WHERE id = %s", (company_id,))
         company = cursor.fetchone()
         col_names = [desc[0] for desc in cursor.description]
         company_dict = dict(zip(col_names, [(val if val is not None else "") for val in company]))
@@ -45,7 +45,7 @@ class Database:
 
     def get_volunteer_by_id(self, volunteer_id):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE id = %s", volunteer_id)
+        cursor.execute("SELECT * FROM users WHERE id = %s", (volunteer_id,))
         volunteer = cursor.fetchone()
         col_names = [desc[0] for desc in cursor.description]
         volunteer_dict = dict(zip(col_names, [(val if val is not None else "") for val in volunteer]))
