@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardMedia, Typography, Box } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, Box, Divider } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
 
-const BusinessCard = ({ id, name, email, image, description, onSwipeLeft, onSwipeRight }) => {
+const BusinessCard = ({ id, name, email, image, description, role, socialGoals, strategies, projectExperience, budget, partners, grants, hobbies, onSwipeLeft, onSwipeRight }) => {
   const [swipeBackgroundColor, setSwipeBackgroundColor] = useState('white');
-  const [position, setPosition] = useState(0); // Stan do przechowywania pozycji karty
+  const [position, setPosition] = useState(0);
 
   const maxSwipeDistance = 150; // Maksymalna odległość, na jaką można przesunąć kartę w jedną stronę
 
@@ -38,6 +38,95 @@ const BusinessCard = ({ id, name, email, image, description, onSwipeLeft, onSwip
     preventDefaultTouchmoveEvent: true,
     trackMouse: true,
   });
+
+  const renderUserDetails = () => {
+    switch (role) {
+      case 'ngo':
+        return (
+          <>
+            <Typography variant="h6" gutterBottom>
+              Social Goals
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {socialGoals || 'No social goals specified.'}
+            </Typography>
+            <Divider sx={{ marginY: 1 }} />
+            <Typography variant="h6" gutterBottom>
+              Strategies
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {strategies || 'No strategies specified.'}
+            </Typography>
+            <Divider sx={{ marginY: 1 }} />
+            <Typography variant="h6" gutterBottom>
+              Project Experience
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {projectExperience || 'No project experience specified.'}
+            </Typography>
+          </>
+        );
+      case 'business':
+        return (
+          <>
+            <Typography variant="h6" gutterBottom>
+              Social Goals
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {socialGoals || 'No social goals specified.'}
+            </Typography>
+            <Divider sx={{ marginY: 1 }} />
+            <Typography variant="h6" gutterBottom>
+              Strategies
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {strategies || 'No strategies specified.'}
+            </Typography>
+            <Divider sx={{ marginY: 1 }} />
+            <Typography variant="h6" gutterBottom>
+              Budget
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {budget ? `$${budget}` : 'No budget specified.'}
+            </Typography>
+            <Divider sx={{ marginY: 1 }} />
+            <Typography variant="h6" gutterBottom>
+              Partners
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {partners || 'No partners specified.'}
+            </Typography>
+            <Divider sx={{ marginY: 1 }} />
+            <Typography variant="h6" gutterBottom>
+              Grants
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {grants || 'No grants specified.'}
+            </Typography>
+          </>
+        );
+      case 'volunteer':
+        return (
+          <>
+            <Typography variant="h6" gutterBottom>
+              Description
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {description || 'No description provided.'}
+            </Typography>
+            <Divider sx={{ marginY: 1 }} />
+            <Typography variant="h6" gutterBottom>
+              Hobbies
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              {hobbies || 'No hobbies specified.'}
+            </Typography>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <motion.div
@@ -77,7 +166,7 @@ const BusinessCard = ({ id, name, email, image, description, onSwipeLeft, onSwip
         <CardMedia
           component="img"
           height="300"
-          src={`http://localhost:4000/api/user/photo/${id}`}
+          src={`http://localhost:8080/api/user/photo/${id}`}
           alt={`${name} image`}
           sx={{ borderRadius: '16px 16px 0 0' }}
         />
@@ -92,6 +181,8 @@ const BusinessCard = ({ id, name, email, image, description, onSwipeLeft, onSwip
         <Typography variant="body2" color="textSecondary">
           Email: {email}
         </Typography>
+        <Divider sx={{ marginY: 1 }} />
+        {renderUserDetails()}
       </CardContent>
     </motion.div>
   );
