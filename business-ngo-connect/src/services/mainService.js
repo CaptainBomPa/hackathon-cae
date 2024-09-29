@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5001/recommendations';
+const API_BASE_URL = 'http://0.0.0.0:5001/recommendations';
 
 // Funkcja do pobierania rekomendacji NGO dla firm
 export const getCompanyRecommendations = async (userId) => {

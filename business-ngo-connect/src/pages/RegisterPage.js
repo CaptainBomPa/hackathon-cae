@@ -22,23 +22,23 @@ import { registerUser, updateUserData } from "../services/authService"; // Impor
 
 // Schemat walidacji z yup
 const validationSchema = yup.object({
-  name: yup.string().required("Name is required"),
-  email: yup
-    .string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-    .matches(/[0-9]/, "Password must contain at least one number")
-    .required("Password is required"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password"), null], "Passwords must match")
-    .required("Confirming password is required"),
-  role: yup.string().required("Role is required"), // Dodana walidacja roli
+  // name: yup.string().required("Name is required"),
+  // email: yup
+  //   .string()
+  //   .email("Invalid email address")
+  //   .required("Email is required"),
+  // password: yup
+  //   .string()
+  //   .min(8, "Password must be at least 8 characters")
+  //   .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+  //   .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+  //   .matches(/[0-9]/, "Password must contain at least one number")
+  //   .required("Password is required"),
+  // confirmPassword: yup
+  //   .string()
+  //   .oneOf([yup.ref("password"), null], "Passwords must match")
+  //   .required("Confirming password is required"),
+  // role: yup.string().required("Role is required"), // Dodana walidacja roli
 });
 
 const RegisterPage = () => {
@@ -297,7 +297,7 @@ const RegisterPage = () => {
                   onClick={formik.handleSubmit} // Wywołanie funkcji onSubmit w Formiku
                   sx={{
                     backgroundColor: "rgba(65, 140, 181, 0.6)",
-                    "&:hover": { backgroundColor: "rgba(65, 140, 181, 1.0)" },
+                    "&:hover": { backgroundColor: "rgba(65, 140, 181, 0.6)" },
                     fontSize: "20px", // Zwiększenie rozmiaru czcionki przycisku
                     borderRadius: "20px",
                   }}
@@ -310,7 +310,7 @@ const RegisterPage = () => {
             // Dodatkowa część formularza dla wybranego typu użytkownika
             <Box
               sx={{
-                height: "70vh", // Stała wysokość sekcji z dodatkowymi polami
+                height: "auto", // Stała wysokość sekcji z dodatkowymi polami
                 overflowY: "auto", // Scroll w pionie
               }}
             >
@@ -440,17 +440,7 @@ const RegisterPage = () => {
 
               {formik.values.role === "volunteer" && (
                 <Grid item xs={12}>
-                  <CustomTextField
-                    label="Description"
-                    name="description"
-                    fullWidth
-                    multiline
-                    rows={4}
-                    value={additionalData.description}
-                    onChange={(e) =>
-                      handleAdditionalDataChange("description", e.target.value)
-                    }
-                  />
+                  
                 </Grid>
               )}
 
@@ -461,8 +451,8 @@ const RegisterPage = () => {
                   fullWidth
                   onClick={handleAdditionalSubmit} // Przesyłanie dodatkowych danych
                   sx={{
-                    backgroundColor: "#6D6D6D",
-                    "&:hover": { backgroundColor: "#5c5c5c" },
+                    backgroundColor: 'rgba(65, 140, 181, 0.6)', 
+                  '&:hover': { backgroundColor: 'rgba(65, 140, 181, 1.0)' }, 
                     fontSize: "20px", // Zwiększenie rozmiaru czcionki przycisku
                     position: "sticky", // Sticky button
                     bottom: 0, // Sticky na dole

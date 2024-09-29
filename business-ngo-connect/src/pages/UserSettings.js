@@ -142,7 +142,9 @@ const UserSettingsPage = () => {
               flexDirection: 'column',
               alignItems: 'center', // Center items
               borderRadius: '20px',
-              width: '70%'
+              width: '70%',
+              marginTop:'10vh'
+              
             }}
           >
             <Typography variant="h6" gutterBottom sx={{
@@ -209,7 +211,9 @@ const UserSettingsPage = () => {
               flexDirection: 'column',
               alignItems: 'center', // Center items
               borderRadius: '20px',
-              width:'70%'
+              width:'70%',
+              marginTop:'10vh'
+            
             }}
           >
             <Typography variant="h6" gutterBottom sx={{
@@ -293,7 +297,8 @@ const UserSettingsPage = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center', // Center items
-              width:'70%'
+              width:'70%',
+              marginTop:'10vh'
             }}
           >
             <Typography variant="h6" gutterBottom>
@@ -338,8 +343,8 @@ const UserSettingsPage = () => {
   };
 
   return (
-    <DashboardLayout>
-      <Container maxWidth="lg" sx={{ marginTop: 2 }}>
+    <DashboardLayout >
+      <Container maxWidth="lg" sx={{ marginTop: 2, background:'transparent' }}>
         <Grid container spacing={4}>
           <Box
             sx={{
