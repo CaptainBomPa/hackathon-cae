@@ -38,7 +38,7 @@ class RecommendationEngine:
             'project_experience': [ngo.project_experience]
         }
         volunteers_data = {
-            'social_goals': [volunteer.social_strategy for volunteer in volunteers],
+            'social_goals': [volunteer.social_goals for volunteer in volunteers],
             'hobbies': [volunteer.hobbies for volunteer in volunteers],
             'experience': [volunteer.experience for volunteer in volunteers],
         }
@@ -72,7 +72,7 @@ class RecommendationEngine:
 
     def get_ngos_for_volunteer(self, volunteer, ngos):
         volunteer_data = {
-            'social_goals': [volunteer.social_strategy],
+            'social_goals': [volunteer.social_goals],
             'hobbies': [volunteer.hobbies],
             'experience': [volunteer.experience],
         }
@@ -85,7 +85,7 @@ class RecommendationEngine:
         df_volunteer = pd.DataFrame(volunteer_data)
         df_ngos = pd.DataFrame(ngos_data)
 
-        volunteer_data['features'] = volunteer_data['social_goals'] + ' ' + volunteer_data['hobbies'] + ' ' + volunteer_data['experience']
+        df_volunteer['features'] = df_volunteer['social_goals'] + ' ' + df_volunteer['hobbies'] + ' ' + df_volunteer['experience']
         df_ngos['features'] = df_ngos['social_goals'] + ' ' + df_ngos['strategies'] + ' ' + df_ngos['projects'] + ' ' + df_ngos['project_experience']
 
         return self._get_recommendations(df_volunteer, ngos, df_ngos)
