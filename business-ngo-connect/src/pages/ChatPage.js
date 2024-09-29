@@ -3,7 +3,7 @@ import { Typography, Box, List, ListItem, ListItemText, Paper, TextField, IconBu
 import SendIcon from '@mui/icons-material/Send';
 import DashboardLayout from '../components/DashboardLayout';
 import { getMatchedUsers, getMessages, sendMessage, connectWebSocket, disconnectWebSocket } from '../services/chatService';
-import { getUserPhoto } from '../services/photoService'; // Import funkcji do pobierania zdjęć
+import { getUserPhoto } from '../services/photoService';
 import { motion } from 'framer-motion';
 
 const pageVariants = {
@@ -17,28 +17,38 @@ const ChatPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [userPhoto, setUserPhoto] = useState(null); // Stan do przechowywania zdjęcia użytkownika
-  const loggedInUserId = 4; // Logged in user
+  const [userPhoto, setUserPhoto] = useState(null);
+  const [loggedInUserId, setLoggedInUserId] = useState(null); // Użycie stanu do przechowywania ID zalogowanego użytkownika
 
   useEffect(() => {
-    const fetchMatchedUsers = async () => {
-      try {
-        const usersData = await getMatchedUsers(loggedInUserId);
-        setMatchedUsers(usersData);
-      } catch (error) {
-        console.error('Error fetching matched users:', error);
-      }
-    };
-    fetchMatchedUsers();
-
-    // Connect to WebSocket when component loads
-    connectWebSocket(loggedInUserId, handleMessageReceived);
-
-    // Disconnect WebSocket on unmount
-    return () => {
-      disconnectWebSocket();
-    };
+    // Pobranie zalogowanego użytkownika z localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser && storedUser.id) {
+      setLoggedInUserId(storedUser.id); // Ustawienie ID zalogowanego użytkownika
+    }
   }, []);
+
+  useEffect(() => {
+    if (loggedInUserId) {
+      const fetchMatchedUsers = async () => {
+        try {
+          const usersData = await getMatchedUsers(loggedInUserId);
+          setMatchedUsers(usersData);
+        } catch (error) {
+          console.error('Error fetching matched users:', error);
+        }
+      };
+      fetchMatchedUsers();
+
+      // Connect to WebSocket when component loads
+      connectWebSocket(loggedInUserId, handleMessageReceived);
+
+      // Disconnect WebSocket on unmount
+      return () => {
+        disconnectWebSocket();
+      };
+    }
+  }, [loggedInUserId]); // Efekt zostanie wykonany, gdy zalogowane ID użytkownika zostanie ustawione
 
   useEffect(() => {
     if (selectedUser) {
@@ -62,7 +72,7 @@ const ChatPage = () => {
       };
       fetchUserPhoto();
     }
-  }, [selectedUser]);
+  }, [selectedUser, loggedInUserId]);
 
   // Handle receiving real-time messages
   const handleMessageReceived = (receivedMessage) => {

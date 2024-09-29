@@ -64,7 +64,7 @@ server.post('/api/register', upload.array('images', 5), (req, res) => {
       password,
       role,
       description,
-      categories,
+      categories: categories ? categories.split(',').map(item => item.trim()) : [],
       images
     };
     router.db.get('users').push(newUser).write();
@@ -101,21 +101,97 @@ server.get('/api/match', (req, res) => {
   res.status(200).json(matchedUsers);
 });
 
+// Custom GET route to fetch recommendations for business
+server.get('/recommendations/company', (req, res) => {
+  const { id } = req.query;
+
+  if (!id) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
+  const users = router.db.get('users').value();
+  const currentUser = users.find(user => user.id === parseInt(id));
+  if (!currentUser) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // Fetch recommendations for companies (NGO role users)
+  const recommendations = users.filter(user => user.role === 'ngo');
+  res.status(200).json(recommendations);
+});
+
+// Custom GET route to fetch recommendations for volunteers
+server.get('/recommendations/volunteer', (req, res) => {
+  const { id } = req.query;
+
+  if (!id) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
+  const users = router.db.get('users').value();
+  const currentUser = users.find(user => user.id === parseInt(id));
+  if (!currentUser) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // Fetch recommendations for volunteers (NGO role users)
+  const recommendations = users.filter(user => user.role === 'ngo');
+  res.status(200).json(recommendations);
+});
+
+// Custom GET route to fetch company recommendations for NGO
+server.get('/recommendations/ngo/companies', (req, res) => {
+  const { id } = req.query;
+
+  if (!id) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
+  const users = router.db.get('users').value();
+  const currentUser = users.find(user => user.id === parseInt(id));
+  if (!currentUser) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // Fetch recommendations for companies (Business role users)
+  const recommendations = users.filter(user => user.role === 'business');
+  res.status(200).json(recommendations);
+});
+
+// Custom GET route to fetch volunteer recommendations for NGO
+server.get('/recommendations/ngo/volunteers', (req, res) => {
+  const { id } = req.query;
+
+  if (!id) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
+  const users = router.db.get('users').value();
+  const currentUser = users.find(user => user.id === parseInt(id));
+  if (!currentUser) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // Fetch recommendations for volunteers (Volunteer role users)
+  const recommendations = users.filter(user => user.role === 'volunteer');
+  res.status(200).json(recommendations);
+});
+
 // Custom POST route for adding a new message
 server.post('/api/chat/send', (req, res) => {
-  const { relationId, message, senderId, receiverId } = req.body;
+  const { senderId, receiverId, content } = req.body;
 
-  if (!relationId || !message || !senderId || !receiverId) {
+  if (!senderId || !receiverId || !content) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
   const newMessage = {
     id: router.db.get('messages').value().length + 1,
-    relationId,
-    message,
-    timestamp: new Date().toISOString(),
     senderId,
-    receiverId
+    receiverId,
+    content,
+    timestamp: new Date().toISOString(),
+    isRead: false
   };
 
   router.db.get('messages').push(newMessage).write();
@@ -155,7 +231,7 @@ server.put('/api/users/:id', upload.array('images', 5), (req, res) => {
     const updatedUser = {
       ...users[userIndex],
       description: description || users[userIndex].description,
-      categories: categories || users[userIndex].categories,
+      categories: categories ? categories.split(',').map(item => item.trim()) : users[userIndex].categories,
       images: images.length > 0 ? images : users[userIndex].images,
     };
     router.db.get('users').splice(userIndex, 1, updatedUser).write();
@@ -187,7 +263,7 @@ server.put('/api/users/:id/password', (req, res) => {
 });
 
 // Custom GET to fetch one image
-server.get('/api/:userId/', (req, res) => {
+server.get('/api/:userId/image', (req, res) => {
   const { userId } = req.params;
   const user = router.db.get('users').find({ id: parseInt(userId) }).value();
 
@@ -227,7 +303,7 @@ server.get('/api/:userId/', (req, res) => {
 server.use('/api', router);
 
 // Start the server
-const PORT = process.env.PORT || 4000; // Ustawienie portu na 4000
+const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => {
   console.log(`JSON Server is running on http://localhost:${PORT}`);
 });

@@ -12,6 +12,7 @@ import {
   getNgoCompanyRecommendations,
   getNgoVolunteerRecommendations,
 } from '../services/mainService';
+import { saveSwipe } from '../services/swipeService'; // Import funkcji saveSwipe
 
 const pageVariants = {
   initial: { opacity: 0, scale: 0.8 },
@@ -61,20 +62,18 @@ const MainPage = () => {
     }
   };
 
-  const handleSwipeLeft = () => {
-    if (currentIndex < businesses.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      setCurrentIndex(0);
-    }
+  // Obsługa swipe w lewo (odrzucenie)
+  const handleSwipeLeft = async () => {
+    const currentBusiness = businesses[currentIndex];
+    await saveSwipe(userId, currentBusiness.id, false); // Zapis swipe w lewo
+    setCurrentIndex(currentIndex < businesses.length - 1 ? currentIndex + 1 : 0);
   };
 
-  const handleSwipeRight = () => {
-    if (currentIndex < businesses.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      setCurrentIndex(0);
-    }
+  // Obsługa swipe w prawo (zaakceptowanie)
+  const handleSwipeRight = async () => {
+    const currentBusiness = businesses[currentIndex];
+    await saveSwipe(userId, currentBusiness.id, true); // Zapis swipe w prawo
+    setCurrentIndex(currentIndex < businesses.length - 1 ? currentIndex + 1 : 0);
   };
 
   const handleFilter = (filterType) => {
@@ -86,7 +85,7 @@ const MainPage = () => {
     switch (userRole) {
       case 'ngo':
         return [
-          { label: 'Search NGO', value: 'ngo' }, // Dodanie opcji 'Search NGO' dla NGO
+          { label: 'Search NGO', value: 'ngo' },
           { label: 'Search Companies', value: 'companies' },
           { label: 'Search Volunteers', value: 'volunteers' },
         ];
@@ -128,14 +127,14 @@ const MainPage = () => {
               flexDirection: 'column',
               alignItems: 'flex-start',
               width: '12%',
-              height: '100%', // Pełna wysokość kontenera
-              backgroundColor: 'rgba(109, 109, 109, 0.4)', // Ustawienie tła z opacity
+              height: '100%',
+              backgroundColor: 'rgba(109, 109, 109, 0.4)',
               padding: 0,
               marginTop: "64px",
-              marginRight: 4, // Dodanie odstępu od głównej zawartości
-              position: 'fixed', // Ustawienie pozycji na stałe przy lewej krawędzi
-              left: 0, // Przesunięcie listy do lewej krawędzi
-              top: 0, // Przesunięcie listy do góry
+              marginRight: 4,
+              position: 'fixed',
+              left: 0,
+              top: 0,
             }}
           >
             <List sx={{ width: '100%' }}>
@@ -148,12 +147,12 @@ const MainPage = () => {
                     backgroundColor:
                       selectedFilter === option.value
                         ? 'rgba(65, 140, 181, 0.6)'
-                        : 'rgba(109, 109, 109, 0.0)', // Zmiana tła po wybraniu
+                        : 'rgba(109, 109, 109, 0.0)',
                     '&:hover': {
-                      backgroundColor: 'rgba(109, 109, 109, 0.6)', // Zmiana opacity po najechaniu
+                      backgroundColor: 'rgba(109, 109, 109, 0.6)',
                     },
-                    opacity: 'inherit', // Dziedziczenie opacity całej listy
-                    transition: 'background-color 0.3s ease', // Płynne przejście tła
+                    opacity: 'inherit',
+                    transition: 'background-color 0.3s ease',
                   }}
                 >
                   <ListItemText primary={option.label} sx={{ color: 'black' }} />
@@ -169,7 +168,7 @@ const MainPage = () => {
               flexDirection: 'column',
               alignItems: 'center',
               width: '80%',
-              marginLeft: '20%', // Przesunięcie zawartości głównej w prawo, aby nie była zasłonięta przez lewy panel
+              marginLeft: '20%',
               marginTop: '5%'
             }}
           >
@@ -178,7 +177,7 @@ const MainPage = () => {
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                marginBottom: 8, // Zwiększony odstęp między kartą a przyciskami
+                marginBottom: 8,
                 width: '100%',
               }}
             >
@@ -191,6 +190,7 @@ const MainPage = () => {
                   description={businesses[currentIndex].description}
                   onSwipeLeft={handleSwipeLeft}
                   onSwipeRight={handleSwipeRight}
+                  role={userRole}
                 />
               ) : (
                 <Typography variant="h6" align="center">
@@ -203,10 +203,10 @@ const MainPage = () => {
             <Box sx={{ display: 'flex', justifyContent: 'center', gap: 12 }}>
               <IconButton
                 sx={{
-                  backgroundColor: '#E38888', // Zmieniony kolor tła przycisku X
+                  backgroundColor: '#E38888',
                   color: 'black',
-                  width: 64, // Zwiększony rozmiar przycisku
-                  height: 64, // Zwiększony rozmiar przycisku
+                  width: 64,
+                  height: 64,
                   '&:hover': { backgroundColor: '#ff6666' },
                 }}
                 onClick={handleSwipeLeft}
@@ -216,10 +216,10 @@ const MainPage = () => {
 
               <IconButton
                 sx={{
-                  backgroundColor: '#61B688', // Zmieniony kolor tła przycisku serca
+                  backgroundColor: '#61B688',
                   color: 'black',
-                  width: 64, // Zwiększony rozmiar przycisku
-                  height: 64, // Zwiększony rozmiar przycisku
+                  width: 64,
+                  height: 64,
                   '&:hover': { backgroundColor: '#66ff66' },
                 }}
                 onClick={handleSwipeRight}
@@ -229,10 +229,10 @@ const MainPage = () => {
 
               <IconButton
                 sx={{
-                  backgroundColor: '#9DADBC', // Zmieniony kolor tła przycisku do skipowania
+                  backgroundColor: '#9DADBC',
                   color: 'black',
-                  width: 64, // Zwiększony rozmiar przycisku
-                  height: 64, // Zwiększony rozmiar przycisku
+                  width: 64,
+                  height: 64,
                   '&:hover': { backgroundColor: '#999999' },
                 }}
                 onClick={handleSwipeRight}

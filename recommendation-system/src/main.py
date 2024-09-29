@@ -16,7 +16,9 @@ def get_companies_for_ngo():
     companies = db.get_companies()
     recommended_companies = engine.get_companies_for_ngo(ngo, companies)
     recommended_companies = [asdict(company) for company in recommended_companies]
-    return jsonify(recommended_companies)
+    response = jsonify(recommended_companies)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/recommendations/ngo/volunteers')
 def get_companies_for_volunteer():
@@ -25,7 +27,9 @@ def get_companies_for_volunteer():
     volunteers = db.get_volunteers()
     recommended_volunteers = engine.get_volunteers_for_ngo(ngo, volunteers)
     recommended_volunteers = [asdict(volunteer) for volunteer in recommended_volunteers]
-    return jsonify(recommended_volunteers)
+    response = jsonify(recommended_volunteers)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/recommendations/company')
 def get_ngos_for_company():
@@ -34,7 +38,9 @@ def get_ngos_for_company():
     ngos = db.get_ngos()
     recommended_ngos = engine.get_ngos_for_company(company, ngos)
     recommended_ngos = [asdict(ngo) for ngo in recommended_ngos]
-    return jsonify(recommended_ngos)
+    response = jsonify(recommended_ngos)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/recommendations/volunteer')
 def get_ngos_for_volunteer():
@@ -43,10 +49,11 @@ def get_ngos_for_volunteer():
     ngos = db.get_ngos()
     recommended_ngos = engine.get_ngos_for_volunteer(volunteer, ngos)
     recommended_ngos = [asdict(ngo) for ngo in recommended_ngos]
-    return jsonify(recommended_ngos)
+    response = jsonify(recommended_ngos)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 if __name__ == '__main__':
-    # DATABASE_URL = os.getenv('DATABASE_URL')
-    DATABASE_URL = "postgres://user:pass@localhost:5432/db"
+    DATABASE_URL = os.getenv('DATABASE_URL')
     db = Database(DATABASE_URL)
-    app.run(debug=True, port=5001)
+    app.run(debug=True, host="0.0.0.0")
