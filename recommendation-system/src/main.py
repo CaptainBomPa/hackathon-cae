@@ -48,4 +48,4 @@ def get_ngos_for_volunteer():
 if __name__ == '__main__':
     DATABASE_URL = os.getenv('DATABASE_URL')
     db = Database(DATABASE_URL)
-    app.run(debug=True, port=5001)
+    app.run(debug=True)
