@@ -57,7 +57,7 @@ public final class DatabaseInitializer implements CommandLineRunner {
 
         //Manual swipe creation
         generateNgoVolunteerMatch(ngoUsers.get(14), volunteerUsers.get(4));
-        generateBizNgoMatch(bizUsers.get(12), ngoUsers.get(14));
+        generateNgoBizMatch(ngoUsers.get(14), bizUsers.get(12));
 
         // You can add more data creation methods here in the future
         generateMessages();
@@ -307,6 +307,7 @@ public final class DatabaseInitializer implements CommandLineRunner {
                 .filter(BizUser.class::isInstance)
                 .map(BizUser.class::cast)
                 .toList());
+        setPhotoToUsers(bizUsers.stream().map(User.class::cast).toList(), "biz");
     }
 
     private void createVolunteerUsers() {
@@ -455,10 +456,10 @@ public final class DatabaseInitializer implements CommandLineRunner {
         return volunteerUser;
     }
 
-    private void generateBizNgoMatch(BizUser biz, NgoUser ngo) {
+    private void generateNgoBizMatch(NgoUser ngo, BizUser biz) {
         Swipe swipeBizNgo = new Swipe();
-        swipeBizNgo.setUserId(biz.getId());
-        swipeBizNgo.setPartnerId(ngo.getId());
+        swipeBizNgo.setUserId(ngo.getId());
+        swipeBizNgo.setPartnerId(biz.getId());
         swipeBizNgo.setSwipeStatus(true);
         swipeRepository.save(swipeBizNgo);
     }
