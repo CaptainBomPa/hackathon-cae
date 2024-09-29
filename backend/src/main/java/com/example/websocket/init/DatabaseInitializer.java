@@ -7,14 +7,17 @@ import com.example.websocket.repository.SwipeRepository;
 import com.example.websocket.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 @Component
 @RequiredArgsConstructor
@@ -173,6 +176,22 @@ public final class DatabaseInitializer implements CommandLineRunner {
                 .filter(NgoUser.class::isInstance)
                 .map(NgoUser.class::cast)
                 .toList());
+        setPhotoToUsers(ngoUsers.stream().map(User.class::cast).toList(), "ngo");
+    }
+
+    private void setPhotoToUsers(List<User> userList, String imageNamePrefix) {
+        IntStream.range(0, userList.size()).forEach(i -> {
+            ClassPathResource defaultProfileImage = new ClassPathResource(imageNamePrefix + (i + 1) + ".png");
+            Photo photo = new Photo();
+            User ngoUser = userList.get(i);
+            try {
+                photo.setPhoto(defaultProfileImage.getContentAsByteArray());
+                ngoUser.setPhoto(photo);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            userRepository.save(ngoUser);
+        });
     }
 
     private void createBizUsers() {
