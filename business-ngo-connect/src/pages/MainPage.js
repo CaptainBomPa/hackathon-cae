@@ -116,7 +116,7 @@ const MainPage = () => {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'flex-start',
-            height: '87vh',
+            height: 'auto',
             padding: 0,
           }}
         >
@@ -183,15 +183,22 @@ const MainPage = () => {
             >
               {businesses.length > 0 ? (
                 <BusinessCard
-                  id={businesses[currentIndex].id}
-                  name={businesses[currentIndex].name}
-                  email={businesses[currentIndex].email}
-                  image={businesses[currentIndex].image}
-                  description={businesses[currentIndex].description}
-                  onSwipeLeft={handleSwipeLeft}
-                  onSwipeRight={handleSwipeRight}
-                  role={userRole}
-                />
+                id={businesses[currentIndex].id}
+                name={businesses[currentIndex].name}
+                email={businesses[currentIndex].email}
+                image={businesses[currentIndex].image}
+                description={businesses[currentIndex].description}
+                socialGoals={businesses[currentIndex].socialGoals}
+                strategies={businesses[currentIndex].strategies}
+                projectExperience={businesses[currentIndex].projectExperience}
+                budget={businesses[currentIndex].budget}
+                partners={businesses[currentIndex].partners}
+                grants={businesses[currentIndex].grants}
+                hobbies={businesses[currentIndex].hobbies}
+                onSwipeLeft={handleSwipeLeft}
+                onSwipeRight={handleSwipeRight}
+                role={userRole}
+              />
               ) : (
                 <Typography variant="h6" align="center">
                   No data available to display.

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardMedia, Typography, Box, Divider } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const BusinessCard = ({ id, name, email, image, description, role, socialGoals, strategies, projectExperience, budget, partners, grants, hobbies, onSwipeLeft, onSwipeRight }) => {
   const [swipeBackgroundColor, setSwipeBackgroundColor] = useState('white');
@@ -39,31 +40,24 @@ const BusinessCard = ({ id, name, email, image, description, role, socialGoals, 
     trackMouse: true,
   });
 
+const cityName = ["Cracow", "Warsaw", "London", "Berlin"]
+
+const randomIndex = Math.floor(Math.random() * cityName.length);
+
+const randomElement = cityName[randomIndex];
+
   const renderUserDetails = () => {
     switch (role) {
       case 'ngo':
         return (
           <>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom sx={{paddingTop:2}}>
               Social Goals
             </Typography>
             <Typography variant="body2" color="textSecondary">
               {socialGoals || 'No social goals specified.'}
             </Typography>
-            <Divider sx={{ marginY: 1 }} />
-            <Typography variant="h6" gutterBottom>
-              Strategies
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {strategies || 'No strategies specified.'}
-            </Typography>
-            <Divider sx={{ marginY: 1 }} />
-            <Typography variant="h6" gutterBottom>
-              Project Experience
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {projectExperience || 'No project experience specified.'}
-            </Typography>
+            
           </>
         );
       case 'business':
@@ -140,6 +134,7 @@ const BusinessCard = ({ id, name, email, image, description, role, socialGoals, 
         background: swipeBackgroundColor,
         position: 'relative',
         transition: 'background 0.3s',
+        width:'80%',
       }}
       animate={{ x: position }}
       initial={{ x: 0 }}
@@ -168,20 +163,31 @@ const BusinessCard = ({ id, name, email, image, description, role, socialGoals, 
           height="300"
           src={`http://localhost:8080/api/user/photo/${id}`}
           alt={`${name} image`}
-          sx={{ borderRadius: '16px 16px 0 0' }}
+          sx={{ 
+            borderRadius: '16px 16px 0 0',
+            height:"30vh" 
+          }}
         />
       </Box>
       <CardContent>
-        <Typography variant="h5" component="div" gutterBottom>
+        <Typography variant="h5" component="div" gutterBottom sx={{WebkitTextFillColor:'rgba(65, 140, 181, 1.0)'}}>
           {name}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        
+        <Typography variant="h6" component="div" gutterBottom>
+        <LocationOnIcon sx={{paddingTop:'8px'}}/>
+          {randomElement}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" sx={{
+          
+        }}>
           {description}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="body2" color="textSecondary" sx={{
+          
+        }}>
           Email: {email}
         </Typography>
-        <Divider sx={{ marginY: 1 }} />
         {renderUserDetails()}
       </CardContent>
     </motion.div>

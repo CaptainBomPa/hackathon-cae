@@ -19,6 +19,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ChatIcon from '@mui/icons-material/Chat';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import PersonIcon from '@mui/icons-material/Person';
 import { getUserPhoto } from '../services/photoService'; // Import funkcji do pobierania zdjęcia
 import { getUser } from '../services/userService'; // Import funkcji do pobierania danych użytkownika
 
@@ -143,7 +144,9 @@ const DashboardLayout = ({ children }) => {
             sx={{ color: '#000' }}
           >
             {/* Wyświetlanie awatara użytkownika */}
-            <Avatar src={userPhoto} alt={userName} />
+            <PersonIcon sx={{
+              width:"130%"
+            }}/>
           </IconButton>
           <Menu
             anchorEl={userMenuAnchorEl}

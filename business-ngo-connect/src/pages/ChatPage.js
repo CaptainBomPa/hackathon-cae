@@ -230,7 +230,7 @@ const ChatPage = () => {
                     <Paper
                       sx={{
                         padding: '10px',
-                        backgroundColor: msg.senderId === loggedInUserId ? '#418CB5' : '#f1f1f1',
+                        backgroundColor: msg.senderId === loggedInUserId ? 'rgba(65, 140, 181, 0.9)' : '#f1f1f1',
                         maxWidth: '70%',
                         wordBreak: 'break-word',
                         borderTopLeftRadius: '20px',
@@ -241,11 +241,19 @@ const ChatPage = () => {
                         borderBottomRightRadius: msg.senderId === loggedInUserId ? 0 : '20px',
                       }}
                     >
-                      <Typography variant="body2" color="textSecondary">
+                      <Typography variant="body2" color="textPrimary">
                         {msg.content}
                       </Typography>
-                      <Typography variant="caption" display="block" align="right">
-                        {new Date(msg.timestamp).toLocaleTimeString()}
+                      <Typography variant="caption" display="block" align="right" color="textSecondary" sx={{fontSize:'0.5em'}}>
+                        {new Date(msg.timestamp).toLocaleDateString('pl-PL', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                        })}{' '}
+                        {new Date(msg.timestamp).toLocaleTimeString('pl-PL', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
                       </Typography>
                     </Paper>
                   </Box>
@@ -271,6 +279,7 @@ const ChatPage = () => {
                         color: 'black',
                         opacity: 0.75,
                       },
+                      backgroundColor: 'rgba(241, 241, 241, 0.6)',
                     },
                   }}
                 />
