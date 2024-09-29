@@ -39,13 +39,14 @@ def get_ngos_for_company():
 @app.route('/recommendations/volunteer')
 def get_ngos_for_volunteer():
     volunteer_id = request.args.get('id')
-    volunteer = db.get_company_by_id(volunteer_id)
+    volunteer = db.get_volunteer_by_id(volunteer_id)
     ngos = db.get_ngos()
     recommended_ngos = engine.get_ngos_for_volunteer(volunteer, ngos)
     recommended_ngos = [asdict(ngo) for ngo in recommended_ngos]
     return jsonify(recommended_ngos)
 
 if __name__ == '__main__':
-    DATABASE_URL = os.getenv('DATABASE_URL')
+    # DATABASE_URL = os.getenv('DATABASE_URL')
+    DATABASE_URL = "postgres://user:pass@localhost:5432/db"
     db = Database(DATABASE_URL)
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
