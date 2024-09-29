@@ -214,7 +214,7 @@ const ChatPage = () => {
             {/* Messages list */}
             <Box sx={{ flex: 1, overflowY: 'auto', padding: 2, backgroundColor: 'transparent' }}>
               {messages.length === 0 ? (
-                <Typography variant="body1" align="center" color="textSecondary" sx={{ color: '#fff' }}>
+                <Typography variant="body1" align="center" color="textSecondary" sx={{ color: 'black' }}>
                   No messages.
                 </Typography>
               ) : (
