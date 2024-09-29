@@ -89,23 +89,29 @@ public class UserService {
     }
 
     public List<User> getNgos() {
-        return userRepository.findAll()
+        List<User> users = userRepository.findAll()
                 .stream()
                 .filter(user -> user.getRole() == Role.NGO)
                 .toList();
+        users.forEach(user -> user.setPhoto(null));
+        return users;
     }
 
     public List<User> getCompanies() {
-        return userRepository.findAll()
+        List<User> users = userRepository.findAll()
                 .stream()
                 .filter(user -> user.getRole() == Role.BUSINESS)
                 .toList();
+        users.forEach(user -> user.setPhoto(null));
+        return users;
     }
 
     public List<User> getVolunteers() {
-        return userRepository.findAll()
+        List<User> users = userRepository.findAll()
                 .stream()
                 .filter(user -> user.getRole() == Role.VOLUNTEER)
                 .toList();
+        users.forEach(user -> user.setPhoto(null));
+        return users;
     }
 }
