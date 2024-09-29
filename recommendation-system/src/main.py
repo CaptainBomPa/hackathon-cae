@@ -46,7 +46,6 @@ def get_ngos_for_volunteer():
     return jsonify(recommended_ngos)
 
 if __name__ == '__main__':
-    # DATABASE_URL = os.getenv('DATABASE_URL')
-    DATABASE_URL = "postgres://user:pass@localhost:5432/db"
+    DATABASE_URL = os.getenv('DATABASE_URL')
     db = Database(DATABASE_URL)
     app.run(debug=True, port=5001)
