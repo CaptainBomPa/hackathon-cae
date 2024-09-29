@@ -135,31 +135,38 @@ const UserSettingsPage = () => {
         return (
           <Paper
             sx={{
-              padding: 2,
+              paddingBottom: 7,
+              paddingTop: 7,
               backgroundColor: '#f0f0f0', // Gray background
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center', // Center items
               borderRadius: '20px',
-        
+              width: '70%'
             }}
           >
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom sx={{
+              marginBottom:2
+            }}>
               Update User Information
             </Typography>
             <TextField
               label="Name"
-              fullWidth
               value={userData.name}
               onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-              sx={{ marginBottom: 2,
-                borderRadius: '20px',
-                width: '60vh'
+              sx={{ 
+                marginBottom: 2,
+                '& .MuiInputLabel-root': {
+                  fontSize: '18px', // Zwiększenie rozmiaru etykiety
+                },
+                '& .MuiOutlinedInput-root': {
+                  width: '50vh', // Ustawia szerokość dla komponentu OutlinedInput
+                  borderRadius:'20px',
+                },
                }}
             />
             <TextField
               label="Email"
-              
               value={userData.email}
               onChange={(e) => setUserData({ ...userData, email: e.target.value })}
               sx={{ 
@@ -167,7 +174,10 @@ const UserSettingsPage = () => {
                 '& .MuiInputLabel-root': {
                   fontSize: '18px', // Zwiększenie rozmiaru etykiety
                 },
-                width: '60vh'
+                '& .MuiOutlinedInput-root': {
+                  width: '50vh', // Ustawia szerokość dla komponentu OutlinedInput
+                  borderRadius:'20px'
+                },
                }}
             />
             <Button
@@ -176,12 +186,13 @@ const UserSettingsPage = () => {
               
               onClick={handleProfileUpdate}
               sx={{ 
-                width: '60vh',
+                width: '50vh',
                 height: '6vh',
                 borderRadius: '20px',
                 marginTop: 2, 
                 backgroundColor: 'rgba(65, 140, 181, 0.8)', 
-                '&:hover': { backgroundColor: 'rgba(65, 140, 181, 1.0)' } }}
+                '&:hover': { backgroundColor: 'rgba(65, 140, 181, 1.0)' }
+              }}
               fullWidth
             >
               Update Profile
@@ -192,47 +203,80 @@ const UserSettingsPage = () => {
         return (
           <Paper
             sx={{
-              padding: 2,
+              padding: 7,
               backgroundColor: '#f0f0f0', // Gray background
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center', // Center items
               borderRadius: '20px',
-              
+              width:'70%'
             }}
           >
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom sx={{
+              marginBottom:2
+            }}>
               Change Password
             </Typography>
             <TextField
               label="Current Password"
               type="password"
-              fullWidth
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              sx={{ marginBottom: 2 }}
+              sx={{ 
+                marginBottom: 2,
+                '& .MuiInputLabel-root': {
+                  fontSize: '18px', // Zwiększenie rozmiaru etykiety
+                },
+                '& .MuiOutlinedInput-root': {
+                  width: '50vh', // Ustawia szerokość dla komponentu OutlinedInput
+                  borderRadius:'20px'
+                },
+               }}
             />
             <TextField
               label="New Password"
               type="password"
-              fullWidth
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              sx={{ marginBottom: 2 }}
+              sx={{ 
+                marginBottom: 2,
+                '& .MuiInputLabel-root': {
+                  fontSize: '18px', // Zwiększenie rozmiaru etykiety
+                },
+                '& .MuiOutlinedInput-root': {
+                  width: '50vh', // Ustawia szerokość dla komponentu OutlinedInput
+                  borderRadius:'20px'
+                },
+               }}
             />
             <TextField
               label="Confirm New Password"
               type="password"
-              fullWidth
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              sx={{ marginBottom: 2 }}
+              sx={{ 
+                marginBottom: 2,
+                '& .MuiInputLabel-root': {
+                  fontSize: '18px', // Zwiększenie rozmiaru etykiety
+                },
+                '& .MuiOutlinedInput-root': {
+                  width: '50vh', // Ustawia szerokość dla komponentu OutlinedInput
+                  borderRadius:'20px'
+                },
+               }}
             />
             <Button
               variant="contained"
               color="primary"
               onClick={handlePasswordUpdate}
-              sx={{ marginTop: 2, backgroundColor: 'rgba(65, 140, 181, 0.8)', '&:hover': { backgroundColor: 'rgba(65, 140, 181, 1.0)' } }}
+              sx={{ 
+                width: '50vh',
+                height: '6vh',
+                borderRadius: '20px',
+                marginTop: 2, 
+                backgroundColor: 'rgba(65, 140, 181, 0.8)', 
+                '&:hover': { backgroundColor: 'rgba(65, 140, 181, 1.0)' }
+              }}
               fullWidth
             >
               Change Password
@@ -243,12 +287,13 @@ const UserSettingsPage = () => {
         return (
           <Paper
             sx={{
-              padding: 2,
+              padding: 7,
               backgroundColor: '#f0f0f0', // Gray background
               borderRadius: '20px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center', // Center items
+              width:'70%'
             }}
           >
             <Typography variant="h6" gutterBottom>
@@ -273,8 +318,14 @@ const UserSettingsPage = () => {
               variant="contained"
               color="primary"
               onClick={handlePhotoUpload}
-              sx={{ marginTop: 2, backgroundColor: 'rgba(65, 140, 181, 0.8)', '&:hover': { backgroundColor: 'rgba(65, 140, 181, 1.0)' } }}
-              fullWidth
+              sx={{ 
+                width: '50vh',
+                height: '6vh',
+                borderRadius: '20px',
+                marginTop: 2, 
+                backgroundColor: 'rgba(65, 140, 181, 0.8)', 
+                '&:hover': { backgroundColor: 'rgba(65, 140, 181, 1.0)' }
+              }}              fullWidth
               disabled={!selectedPhoto}
             >
               Upload Photo
@@ -331,8 +382,9 @@ const UserSettingsPage = () => {
           </Box>
 
           <Grid item xs={12} md={9} sx={{ 
-            marginLeft: '20%', 
-            height:'100vh'
+            marginLeft: '30%', 
+            height:'80vh',
+            justifyContent:'center'
             }}> {/* Add margin to offset the fixed sidebar */}
             <motion.div
               variants={pageVariants}
