@@ -19,9 +19,6 @@ def get_companies_for_ngo():
     recommended_companies = engine.get_companies_for_ngo(ngo, companies)
     recommended_companies = [asdict(company) for company in recommended_companies]
     response = jsonify(recommended_companies)
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-Requested-With"
     return response
 
 @app.route('/recommendations/ngo/volunteers')
@@ -33,9 +30,6 @@ def get_companies_for_volunteer():
     recommended_volunteers = engine.get_volunteers_for_ngo(ngo, volunteers)
     recommended_volunteers = [asdict(volunteer) for volunteer in recommended_volunteers]
     response = jsonify(recommended_volunteers)
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-Requested-With"
     return response
 
 @app.route('/recommendations/company')
@@ -47,9 +41,6 @@ def get_ngos_for_company():
     recommended_ngos = engine.get_ngos_for_company(company, ngos)
     recommended_ngos = [asdict(ngo) for ngo in recommended_ngos]
     response = jsonify(recommended_ngos)
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-Requested-With"
     return response
 
 @app.route('/recommendations/volunteer')
@@ -61,18 +52,7 @@ def get_ngos_for_volunteer():
     recommended_ngos = engine.get_ngos_for_volunteer(volunteer, ngos)
     recommended_ngos = [asdict(ngo) for ngo in recommended_ngos]
     response = jsonify(recommended_ngos)
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-Requested-With"
     return response
-
-@app.before_request
-def before_request():
-    headers = {'Access-Control-Allow-Origin': '*',
-               'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-               'Access-Control-Allow-Headers': 'Content-Type'}
-    if request.method.lower() == 'options':
-        return jsonify(headers), 200
 
 if __name__ == '__main__':
     DATABASE_URL = os.getenv('DATABASE_URL')
