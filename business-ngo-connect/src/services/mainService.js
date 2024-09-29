@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api/user';
+const API_BASE_URL = 'http://localhost:8080/api/user/';
 
 // Funkcja do pobierania rekomendacji NGO dla firm
 export const getCompanyRecommendations = async (userId) => {
@@ -40,7 +40,7 @@ export const getNgoCompanyRecommendations = async (userId) => {
 // Funkcja do pobierania rekomendacji wolontariuszy dla NGO
 export const getNgoVolunteerRecommendations = async (userId) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/ngos`);
+    const response = await axios.get(`${API_BASE_URL}/ngo`);
     return response.data;
   } catch (error) {
     console.error('Error fetching NGO volunteer recommendations:', error);
