@@ -1,6 +1,7 @@
 from dataclasses import asdict
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 
 from engine import RecommendationEngine
 from database import Database
@@ -10,6 +11,7 @@ app = Flask(__name__)
 engine = RecommendationEngine()
 
 @app.route('/recommendations/ngo/companies')
+@cross_origin()
 def get_companies_for_ngo():
     ngo_id = request.args.get('id')
     ngo = db.get_ngo_by_id(ngo_id)
@@ -21,6 +23,7 @@ def get_companies_for_ngo():
     return response
 
 @app.route('/recommendations/ngo/volunteers')
+@cross_origin()
 def get_companies_for_volunteer():
     ngo_id = request.args.get('id')
     ngo = db.get_ngo_by_id(ngo_id)
@@ -32,6 +35,7 @@ def get_companies_for_volunteer():
     return response
 
 @app.route('/recommendations/company')
+@cross_origin()
 def get_ngos_for_company():
     company_id = request.args.get('id')
     company = db.get_company_by_id(company_id)
@@ -43,6 +47,7 @@ def get_ngos_for_company():
     return response
 
 @app.route('/recommendations/volunteer')
+@cross_origin()
 def get_ngos_for_volunteer():
     volunteer_id = request.args.get('id')
     volunteer = db.get_volunteer_by_id(volunteer_id)
@@ -56,4 +61,5 @@ def get_ngos_for_volunteer():
 if __name__ == '__main__':
     DATABASE_URL = os.getenv('DATABASE_URL')
     db = Database(DATABASE_URL)
+    CORS(app)
     app.run(debug=True, host="0.0.0.0")
